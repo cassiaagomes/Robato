@@ -1,9 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"><title>Fila de Prioridade</title></head>
+<head>
+    <meta charset="UTF-8">
+    <title>Fila de Exames</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link href="/css/style.css" rel="stylesheet">
+</head>
 <body>
-<h2>Fila</h2>
-<p>Tamanho atual da fila: <span th:text="${tamanho}"></span></p>
-<a th:href="@{/}">Voltar</a>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <div class="content">
+        <div class="page-header mb-4">
+            <h1>Fila de Exames</h1>
+        </div>
+
+        <!-- Mensagem de sucesso -->
+        <div th:if="${mensagemSucesso}" class="alert alert-success" th:text="${mensagemSucesso}"></div>
+
+        <p>Tamanho atual da fila: <strong th:text="${tamanho}">0</strong></p>
+
+        <table class="table queue-table">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Tipo de Exame</th>
+                    <th>Prioridade</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:if="${exames == null or #lists.isEmpty(exames)}">
+                    <td colspan="3" class="text-center text-muted">Nenhum exame na fila</td>
+                </tr>
+                <tr th:each="exame : ${exames}">
+                    <td th:text="${exame.paciente}"></td>
+                    <td th:text="${exame.tipoExame}"></td>
+                    <td>
+                        <span class="badge bg-primary" th:text="${exame.prioridade}"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
+

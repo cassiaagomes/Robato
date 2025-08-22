@@ -17,6 +17,7 @@ import com.robato.diagnosticos.desconto.Desconto;
 import com.robato.diagnosticos.desconto.DescontoConvenio;
 import com.robato.diagnosticos.desconto.DescontoIdoso;
 import com.robato.diagnosticos.desconto.DescontoOutubroRosa;
+import com.robato.diagnosticos.domain.Paciente;
 import com.robato.diagnosticos.exame.ExameComponent;
 import com.robato.diagnosticos.exame.ExameFactory;
 import com.robato.diagnosticos.exame.HemogramaAgrupado;
@@ -286,11 +287,19 @@ public class SistemaDiagnosticoFacade {
         return fila.tamanho();
     }
 
+    public List<FilaDePrioridade.Item> listarExamesEmFila() {
+        return fila.listarExames();
+    }
+
     public Map<String, com.robato.diagnosticos.domain.Paciente> listarPacientes() {
         return csv.listarPacientes();
     }
 
     public Map<String, com.robato.diagnosticos.domain.Medico> listarMedicos() {
         return csv.listarMedicos();
+    }
+
+    public void adicionarPaciente(Paciente novoPaciente) {
+        listarPacientes().put(novoPaciente.getNome(), novoPaciente);
     }
 }

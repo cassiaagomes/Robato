@@ -1,1 +1,5 @@
-package com.robato.diagnosticos.prioridade; public interface EstrategiaPrioridade { int determinarPrioridade(String tipoExame); }
+package com.robato.diagnosticos.prioridade;
+
+public interface EstrategiaPrioridade {
+    int determinarPrioridade(String tipoExame);
+}

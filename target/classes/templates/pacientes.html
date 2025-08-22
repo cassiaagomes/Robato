@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Pacientes - Robato Diagnósticos</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <div class="content">
+        <!-- Header -->
+        <div class="page-header mb-4 d-flex justify-content-between align-items-center">
+            <h1>Pacientes</h1>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPacienteModal">
+                <i class="fa-solid fa-plus me-2"></i>Adicionar Paciente
+            </button>
+        </div>
+
+        <!-- Alerta de sucesso -->
+        <div th:if="${param.adicionado}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Paciente adicionado à fila com sucesso!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Card de pacientes -->
+        <div class="card">
+            <!-- Busca -->
+            <div class="card-header d-flex justify-content-end">
+                <div class="w-25">
+                    <input type="search" class="form-control" placeholder="Buscar paciente...">
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive" th:if="${pacientes != null and !pacientes.isEmpty()}">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;"><input class="form-check-input" type="checkbox"></th>
+                                <th>Paciente</th>
+                                <th>Convênio</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="paciente : ${pacientes}">
+                                <td><input class="form-check-input" type="checkbox"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-placeholder me-3" th:text="${#strings.substring(paciente.nome, 0, 1)}"></div>
+                                        <div>
+                                            <div class="fw-bold" th:text="${paciente.nome}"></div>
+                                            <div class="text-muted" th:text="${paciente.email}"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${paciente.convenio}"></td>
+                                <td class="text-end">
+                                    <!-- Botão Adicionar à Fila -->
+                                    <button type="button" class="btn btn-sm btn-outline-primary me-2" 
+                                            data-bs-toggle="modal" data-bs-target="#addExameFilaModal" 
+                                            th:attr="data-bs-paciente-nome=${paciente.nome}">
+                                        <i class="fa-solid fa-vial-circle-check me-1"></i> Adicionar à Fila
+                                    </button>
+
+                                    <!-- Botão Editar -->
+                                    <button type="button" class="btn btn-sm btn-outline-warning me-2" 
+                                            data-bs-toggle="modal" data-bs-target="#editPacienteModal" 
+                                            th:attr="data-bs-id=${paciente.id},data-bs-nome=${paciente.nome},data-bs-email=${paciente.email},data-bs-telefone=${paciente.telefone},data-bs-convenio=${paciente.convenio}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+
+                                    <!-- Botão Excluir -->
+                                    <form th:action="@{/pacientes/excluir/{id}(id=${paciente.id})}" method="post" style="display:inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                                onclick="return confirm('Tem certeza que deseja excluir este paciente?');">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p th:if="${pacientes == null or pacientes.isEmpty()}" class="text-center text-muted mt-4">
+                    Nenhum paciente cadastrado.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Paciente -->
+    <div class="modal fade" id="addPacienteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Novo Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/pacientes/salvar}" method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome Completo:</label>
+                            <input type="text" class="form-control" id="nome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="convenio" class="form-label">Convênio:</label>
+                            <input type="text" class="form-control" id="convenio" name="convenio">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Salvar Paciente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Paciente -->
+    <div class="modal fade" id="editPacienteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Paciente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/pacientes/atualizar}" method="post">
+                        <input type="hidden" id="edit-id" name="id">
+                        <div class="mb-3">
+                            <label for="edit-nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" id="edit-nome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="edit-email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-telefone" class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" id="edit-telefone" name="telefone">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-convenio" class="form-label">Convênio:</label>
+                            <input type="text" class="form-control" id="edit-convenio" name="convenio">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Exame à Fila -->
+    <div class="modal fade" id="addExameFilaModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Exame à Fila</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/fila/adicionar}" method="post">
+                        <input type="hidden" name="pacienteNome" id="filaPacienteNome">
+                        <div class="mb-3">
+                            <label class="form-label">Paciente:</label>
+                            <p class="fw-bold" id="filaDisplayPacienteNome"></p>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tipoExame" class="form-label">Tipo de Exame:</label>
+                            <select id="tipoExame" name="tipoExame" class="form-select" required>
+                                <option value="">Selecione um exame</option>
+                                <option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prioridade" class="form-label">Prioridade do Exame:</label>
+                            <select id="prioridade" name="prioridade" class="form-select">
+                                <option value="ROTINA">Rotina</option>
+                                <option value="POUCO_URGENTE">Pouco Urgente</option>
+                                <option value="URGENTE">Urgente</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Adicionar à Fila</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Preencher modal de Adicionar à Fila
+        const addExameFilaModal = document.getElementById('addExameFilaModal');
+        addExameFilaModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const pacienteNome = button.getAttribute('data-bs-paciente-nome');
+            addExameFilaModal.querySelector('#filaPacienteNome').value = pacienteNome;
+            addExameFilaModal.querySelector('#filaDisplayPacienteNome').textContent = pacienteNome;
+        });
+
+        // Preencher modal de Editar Paciente
+        const editPacienteModal = document.getElementById('editPacienteModal');
+        editPacienteModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            document.getElementById('edit-id').value = button.getAttribute('data-bs-id');
+            document.getElementById('edit-nome').value = button.getAttribute('data-bs-nome');
+            document.getElementById('edit-email').value = button.getAttribute('data-bs-email');
+            document.getElementById('edit-telefone').value = button.getAttribute('data-bs-telefone');
+            document.getElementById('edit-convenio').value = button.getAttribute('data-bs-convenio');
+        });
+    </script>
+</body>
+</html>

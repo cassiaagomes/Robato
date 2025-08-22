@@ -3,29 +3,31 @@
     
     <ul class="nav-list">
         <li>
-            <a th:href="@{/}" class="active"> <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+            <a th:href="@{/}" th:classappend="${currentUri == '/' ? 'active' : ''}">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/exames/novo}">
+            <a th:href="@{/exames/novo}" th:classappend="${currentUri.startsWith('/exames/novo') ? 'active' : ''}">
                 <i class="fa-solid fa-file-medical"></i>
                 <span>Gerar Laudo</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/fila}">
+            <a th:href="@{/fila}" th:classappend="${currentUri.startsWith('/fila') ? 'active' : ''}">
                 <i class="fa-solid fa-users-line"></i>
                 <span>Fila de Exames</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/pacientes}">
+            <a th:href="@{/pacientes}" th:classappend="${currentUri.startsWith('/pacientes') ? 'active' : ''}">
                 <i class="fa-solid fa-user-injured"></i>
                 <span>Pacientes</span>
             </a>
         </li>
         <li>
-            <a th:href="@{/medicos}">
+            <a th:href="@{/medicos}" th:classappend="${currentUri.startsWith('/medicos') ? 'active' : ''}">
                 <i class="fa-solid fa-user-doctor"></i>
                 <span>Médicos</span>
             </a>
@@ -36,7 +38,7 @@
     
     <ul class="nav-list">
         <li>
-            <a th:href="@{/sobre}">
+            <a th:href="@{/sobre}" th:classappend="${currentUri.startsWith('/sobre') ? 'active' : ''}">
                 <i class="fa-solid fa-circle-info"></i>
                 <span>Sobre</span>
             </a>

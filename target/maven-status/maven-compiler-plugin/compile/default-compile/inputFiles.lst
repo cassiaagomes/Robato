@@ -47,6 +47,8 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridadeUrgente.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\FilaDePrioridade.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\RobatoApplication.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\FilaService.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\PacienteService.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorBase.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorCreatinina.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorExame.java
@@ -60,3 +62,5 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\dto\ValidacaoContexto.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\dto\ValidacaoRequest.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\ExameViewController.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\FilaController.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\PacienteViewController.java

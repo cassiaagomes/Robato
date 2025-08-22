@@ -20,6 +20,7 @@ import com.robato.diagnosticos.web.dto.LaudoRequest;
 import com.robato.diagnosticos.web.dto.ResultadoExameItem;
 import com.robato.diagnosticos.web.dto.ValidacaoContexto;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
@@ -32,7 +33,7 @@ public class ExameViewController {
     }
 
     @GetMapping({ "/", "/dashboard" })
-    public String dashboard(Model model) {
+    public String dashboard(Model model, HttpServletRequest request) {
         Map<String, Object> stats = new HashMap<>();
         stats.put("laudosNoMes", 78);
         stats.put("pacientesEmFila", facade.tamanhoFila());
@@ -40,20 +41,24 @@ public class ExameViewController {
         stats.put("medicosAtivos", facade.listarMedicos().size());
         model.addAttribute("stats", stats);
         model.addAttribute("tipos", TipoExame.values());
+        model.addAttribute("currentUri", request.getRequestURI());
         return "dashboard";
     }
 
     @GetMapping("/exames/novo")
-    public String novo(Model model, @ModelAttribute("laudoRequest") LaudoRequest laudoRequest) {
+    public String novo(Model model, @ModelAttribute("laudoRequest") LaudoRequest laudoRequest,
+            HttpServletRequest request) {
         if (laudoRequest == null || laudoRequest.getTipoExame() == null) {
             model.addAttribute("laudoRequest", new LaudoRequest());
         }
         model.addAttribute("tipos", TipoExame.values());
+        model.addAttribute("currentUri", request.getRequestURI());
         return "exames";
     }
 
     @GetMapping("/exames/importar-pagina")
-    public String paginaImportar() {
+    public String paginaImportar(Model model, HttpServletRequest request) {
+        model.addAttribute("currentUri", request.getRequestURI());
         return "importar";
     }
 
@@ -76,7 +81,8 @@ public class ExameViewController {
     }
 
     @PostMapping("/exames/gerar")
-    public String gerarLaudo(@ModelAttribute LaudoRequest req, Model model, HttpSession session) {
+    public String gerarLaudo(@ModelAttribute LaudoRequest req, Model model, HttpSession session,
+            HttpServletRequest request) {
         try {
             @SuppressWarnings("unchecked")
             List<ResultadoExameItem> resultadosSalvos = (List<ResultadoExameItem>) session
@@ -89,12 +95,9 @@ public class ExameViewController {
                 req.getContexto().setResultados(resultadosSalvos);
             }
 
-            // Gera o objeto do laudo
             LaudoCompleto laudoObjeto = facade.construirLaudo(req);
-            // Formata o laudo para HTML, PDF ou texto
             String laudoFormatado = facade.formatarLaudo(laudoObjeto, req.getFormato());
 
-            // Passa para a view
             model.addAttribute("laudo", laudoFormatado);
             model.addAttribute("tipoExame", req.getTipoExame());
             model.addAttribute("pacienteNome", req.getPacienteNome());
@@ -103,21 +106,19 @@ public class ExameViewController {
             model.addAttribute("medicoResponsavel", req.getMedicoResponsavel());
             model.addAttribute("crmResponsavel", req.getCrmResponsavel());
 
-            // Remove resultados temporários da sessão
             session.removeAttribute("resultadosDoCsv");
 
+            model.addAttribute("currentUri", request.getRequestURI());
             return "laudo";
         } catch (Exception e) {
             model.addAttribute("erro", "Erro ao gerar laudo: " + e.getMessage());
             model.addAttribute("laudoRequest", req);
             model.addAttribute("tipos", TipoExame.values());
+            model.addAttribute("currentUri", request.getRequestURI());
             return "exames";
         }
     }
+ 
+    
 
-    @GetMapping("/fila")
-    public String fila(Model model) {
-        model.addAttribute("tamanho", facade.tamanhoFila());
-        return "fila";
-    }
 }
