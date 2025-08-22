@@ -1,0 +1,1 @@
+package com.robato.diagnosticos.notificacao; public class NotificadorEmail implements ObservadorNotificacao { public void atualizar(String mensagem,String destino){ System.out.println("[Email] " + destino + ": " + mensagem); } }

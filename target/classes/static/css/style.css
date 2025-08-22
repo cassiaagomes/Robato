@@ -1,0 +1,266 @@
+/* --- DEFINIÇÃO DA PALETA DE CORES E ESTILOS GLOBAIS --- */
+:root {
+    --cor-primaria: #0A2342;      /* Azul Marinho para o sidebar */
+    --cor-primaria-hover: #192A56;/* Tom mais claro para o hover */
+    --cor-fundo: #F8F9FA;         /* Cinza bem clarinho para o conteúdo */
+    --cor-branco: #FFFFFF;
+    --cor-texto-escuro: #212529;   /* Cinza escuro para textos */
+    --cor-texto-claro: #adb5bd;     /* Cinza claro para subtítulos */
+    --cor-destaque: #007BFF;      /* Azul para ícones e detalhes */
+    --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* --- ESTILO GERAL --- */
+body {
+    margin: 0;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--cor-primaria); /* MUDANÇA AQUI: Fundo agora é azul */
+    color: var(--cor-texto-escuro);
+    /* A linha 'display: flex;' foi removida */
+    height: 100vh;
+    overflow: hidden; 
+}
+
+/* --- BARRA LATERAL (SIDEBAR) --- */
+.sidebar {
+    position: fixed; /* MUDANÇA AQUI */
+    top: 0;          /* MUDANÇA AQUI */
+    left: 0;         /* MUDANÇA AQUI */
+    z-index: 1000;   /* MUDANÇA AQUI */
+    height: 100%;    /* MUDANÇA AQUI */
+
+    width: 260px; 
+    background-color: var(--cor-primaria);
+    color: var(--cor-branco);
+    padding: 25px 15px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    /* A linha 'flex-shrink: 0;' foi removida */
+}
+
+.sidebar h2 {
+    color: var(--cor-branco);
+    text-align: center;
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 40px;
+    letter-spacing: 1px;
+}
+
+.sidebar .nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: var(--cor-branco);
+    text-decoration: none;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.sidebar a:hover {
+    background-color: var(--cor-primaria-hover);
+}
+
+.sidebar a.active {
+    background-color: var(--cor-branco);
+    color: var(--cor-primaria);
+    font-weight: 600;
+}
+
+.sidebar hr {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+
+/* --- ÁREA DE CONTEÚDO PRINCIPAL --- */
+.content {
+    /* MUDANÇAS AQUI ABAIXO */
+    margin-left: calc(260px + 20px); /* Largura da sidebar + espaçamento */
+    margin-top: 20px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    height: calc(100vh - 40px); /* Ajusta a altura para caber na tela com as margens */
+    /* A propriedade 'flex-grow' e a antiga 'margin' foram removidas */
+
+    overflow-y: auto; 
+    padding: 40px; 
+    background-color: var(--cor-branco); 
+    border-radius: 25px; 
+    box-shadow: var(--sombra-suave); 
+}
+
+.content h1 {
+    font-weight: 700;
+    margin-bottom: 30px !important;
+}
+
+/* --- CARDS DE ESTATÍSTICAS (sem alterações) --- */
+.card {
+    background-color: var(--cor-branco);
+    border: none;
+    border-radius: 12px;
+    box-shadow: var(--sombra-suave);
+    padding: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.stat-card .card-title {
+    font-size: 1em;
+    font-weight: 500;
+    color: var(--cor-texto-claro);
+    margin: 0;
+}
+
+.stat-card .card-icon {
+    font-size: 1.5em;
+    padding: 10px;
+    border-radius: 8px;
+    color: var(--cor-destaque);
+    background-color: #e6f2ff;
+}
+
+.stat-card .card-body {
+    padding: 20px 0 0 0;
+}
+
+.stat-card .card-value {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--cor-texto-escuro);
+}
+
+.stat-card .card-description {
+    color: var(--cor-texto-claro);
+    font-size: 0.9em;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 15px;
+}
+
+/* ======================================================= */
+/* --- ESTILOS PARA A PÁGINA DE LAUDO --- */
+/* ======================================================= */
+
+/* Fundo da página do laudo */
+body.laudo-page {
+    background-color: #e9ecef; /* Um cinza claro para destacar a "folha" */
+    display: block; /* Sobrescreve o display:flex do body geral */
+}
+
+/* Barra de ações (Voltar, Imprimir) */
+.laudo-actions {
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+/* Container principal do laudo (a "folha de papel") */
+.laudo-container {
+    max-width: 800px; /* Largura similar a um A4 */
+    margin: 0 auto 40px auto;
+    padding: 50px;
+    background: white;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    border-radius: 5px;
+}
+
+/* Cabeçalho com o nome da clínica e tipo de exame */
+.laudo-header {
+    text-align: center;
+    border-bottom: 2px solid var(--cor-primaria);
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+.laudo-header h1 {
+    color: var(--cor-primaria);
+    font-weight: 700;
+    margin: 0;
+}
+.laudo-header h2 {
+    color: var(--cor-texto-escuro);
+    font-size: 1.4em;
+    font-weight: 400;
+    margin-top: 5px;
+}
+
+/* Seção de informações do paciente */
+.laudo-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Duas colunas */
+    gap: 15px 20px; /* Espaçamento entre os itens */
+    margin-bottom: 40px;
+    font-size: 0.9em;
+}
+.laudo-info .info-item strong {
+    display: block;
+    color: #6c757d;
+}
+
+/* Corpo principal do laudo */
+.laudo-body {
+    line-height: 1.8; /* Melhora a legibilidade */
+    text-align: justify;
+    padding-bottom: 50px;
+}
+
+/* Rodapé com a assinatura */
+.laudo-assinatura {
+    text-align: center;
+    padding-top: 40px;
+}
+.laudo-assinatura .assinatura-linha {
+    width: 300px;
+    height: 1px;
+    background-color: #343a40;
+    margin: 0 auto 10px auto;
+}
+.laudo-assinatura p {
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* --- ESTILOS PARA IMPRESSÃO --- */
+@media print {
+    body.laudo-page {
+        background-color: white; /* Fundo branco na impressão */
+    }
+    .laudo-actions {
+        display: none; /* Esconde os botões de ação */
+    }
+    .laudo-container {
+        box-shadow: none; /* Remove a sombra */
+        margin: 0;
+        max-width: 100%;
+        border-radius: 0;
+    }
+}

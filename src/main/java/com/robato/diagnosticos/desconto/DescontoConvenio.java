@@ -1,0 +1,1 @@
+package com.robato.diagnosticos.desconto; public class DescontoConvenio implements Desconto { private final double p; public DescontoConvenio(double p){this.p=p;} public double aplicar(double v){return v*(1-p);} }

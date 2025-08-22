@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Robato Diagnósticos</title></head>
+<body>
+<h1>Robato Diagnósticos</h1>
+<ul>
+  <li><a th:href="@{/exames/novo}">Gerar Laudo</a></li>
+  <li><a th:href="@{/fila}">Ver Fila</a></li>
+</ul>
+<hr/>
+<h3>Pacientes carregados</h3>
+<ul>
+  <li th:each="p : ${pacientes}" th:text="${p}"></li>
+</ul>
+<h3>Médicos carregados</h3>
+<ul>
+  <li th:each="m : ${medicos}" th:text="${m}"></li>
+</ul>
+</body>
+</html>

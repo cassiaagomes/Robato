@@ -1,0 +1,1 @@
+package com.robato.diagnosticos.notificacao; public class NotificadorWhatsapp implements ObservadorNotificacao { public void atualizar(String mensagem,String destino){ System.out.println("[WhatsApp] " + destino + ": " + mensagem); } }

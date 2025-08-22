@@ -1,0 +1,45 @@
+<div th:fragment="sidebar" class="sidebar">
+    <h2>ROBATO</h2>
+    
+    <ul class="nav-list">
+        <li>
+            <a th:href="@{/}" class="active"> <i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/exames/novo}">
+                <i class="fa-solid fa-file-medical"></i>
+                <span>Gerar Laudo</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/fila}">
+                <i class="fa-solid fa-users-line"></i>
+                <span>Fila de Exames</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/pacientes}">
+                <i class="fa-solid fa-user-injured"></i>
+                <span>Pacientes</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/medicos}">
+                <i class="fa-solid fa-user-doctor"></i>
+                <span>Médicos</span>
+            </a>
+        </li>
+    </ul>
+    
+    <hr>
+    
+    <ul class="nav-list">
+        <li>
+            <a th:href="@{/sobre}">
+                <i class="fa-solid fa-circle-info"></i>
+                <span>Sobre</span>
+            </a>
+        </li>
+    </ul>
+</div>

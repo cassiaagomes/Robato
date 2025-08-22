@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>Gerar Laudo</title></head>
+<body>
+<h2>Gerar Laudo</h2>
+<form th:action="@{/exames/gerar}" method="post">
+  <label>Tipo de Exame:
+    <select name="tipoExame" th:each="t: ${tipos}" th:value="${t}" th:text="${t}"></select>
+  </label><br/>
+  <label>Formato:
+    <select name="formato"><option value="txt">TXT</option><option value="html">HTML</option><option value="pdf">PDF</option></select>
+  </label><br/>
+  <label>Paciente Nome: <input type="text" name="pacienteNome"/></label><br/>
+  <label>Convênio: <input type="text" name="convenio"/></label><br/>
+  <label>Médico Solicitante: <input type="text" name="medicoSolicitante"/></label><br/>
+  <label>Médico Responsável: <input type="text" name="medicoResponsavel"/></label><br/>
+  <label>CRM Responsável: <input type="text" name="crmResponsavel"/></label><br/>
+  <h3>Contexto (opcional)</h3>
+  <label>Valor (ex: glicose): <input type="number" step="any" name="contexto.valor"/></label><br/>
+  <label>Unidade: <input type="text" name="contexto.unidade"/></label><br/>
+  <label>Idade: <input type="number" name="contexto.idade"/></label><br/>
+  <label>Sexo: <input type="text" name="contexto.sexo"/></label><br/>
+  <label>Paciente com implantes? <input type="checkbox" name="contexto.pacienteComImplantesMetalicos" value="true"/></label><br/>
+  <label>Radiologista assinatura: <input type="text" name="contexto.radiologistaAssinatura"/></label><br/>
+  <label>Protocolo (RM): <input type="text" name="contexto.protocolo"/></label><br/>
+  <label>Usou contraste? <input type="checkbox" name="contexto.usouContraste" value="true"/></label><br/>
+  <label>Contraste: <input type="text" name="contexto.contraste"/></label><br/>
+  <label>Dose contraste: <input type="text" name="contexto.doseContraste"/></label><br/>
+  <button type="submit">Gerar Laudo</button>
+</form>
+<p th:if="${erro}" th:text="${erro}" style="color:red"></p>
+</body>
+</html>
