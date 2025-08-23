@@ -64,7 +64,8 @@
                                 <td><input class="form-check-input" type="checkbox"></td>
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <div class="avatar-placeholder me-3" th:text="${#strings.substring(paciente.nome, 0, 1)}"></div>
+                                        <div class="avatar-placeholder me-3"
+                                            th:text="${#strings.substring(paciente.nome, 0, 1)}"></div>
                                         <div>
                                             <div class="fw-bold" th:text="${paciente.nome}"></div>
                                             <div class="text-muted" th:text="${paciente.email}"></div>
@@ -74,23 +75,24 @@
                                 <td th:text="${paciente.convenio}"></td>
                                 <td class="text-end">
                                     <!-- Botão Adicionar à Fila -->
-                                    <button type="button" class="btn btn-sm btn-outline-primary me-2" 
-                                            data-bs-toggle="modal" data-bs-target="#addExameFilaModal" 
-                                            th:attr="data-bs-paciente-nome=${paciente.nome}">
+                                    <button type="button" class="btn btn-sm btn-outline-primary me-2"
+                                        data-bs-toggle="modal" data-bs-target="#addExameFilaModal"
+                                        th:attr="data-bs-id=${paciente.id},data-bs-paciente-nome=${paciente.nome}">
                                         <i class="fa-solid fa-vial-circle-check me-1"></i> Adicionar à Fila
                                     </button>
 
                                     <!-- Botão Editar -->
-                                    <button type="button" class="btn btn-sm btn-outline-warning me-2" 
-                                            data-bs-toggle="modal" data-bs-target="#editPacienteModal" 
-                                            th:attr="data-bs-id=${paciente.id},data-bs-nome=${paciente.nome},data-bs-email=${paciente.email},data-bs-telefone=${paciente.telefone},data-bs-convenio=${paciente.convenio}">
+                                    <button type="button" class="btn btn-sm btn-outline-warning me-2"
+                                        data-bs-toggle="modal" data-bs-target="#editPacienteModal"
+                                        th:attr="data-bs-id=${paciente.id},data-bs-nome=${paciente.nome},data-bs-email=${paciente.email},data-bs-telefone=${paciente.telefone},data-bs-convenio=${paciente.convenio}">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
                                     <!-- Botão Excluir -->
-                                    <form th:action="@{/pacientes/excluir/{id}(id=${paciente.id})}" method="post" style="display:inline">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger" 
-                                                onclick="return confirm('Tem certeza que deseja excluir este paciente?');">
+                                    <form th:action="@{/pacientes/excluir/{id}(id=${paciente.id})}" method="post"
+                                        style="display:inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Tem certeza que deseja excluir este paciente?');">
                                             <i class="fa-solid fa-trash-can"></i>
                                         </button>
                                     </form>
@@ -189,6 +191,7 @@
                 </div>
                 <div class="modal-body">
                     <form th:action="@{/fila/adicionar}" method="post">
+                        <input type="hidden" name="pacienteId" id="filaPacienteId">
                         <input type="hidden" name="pacienteNome" id="filaPacienteNome">
                         <div class="mb-3">
                             <label class="form-label">Paciente:</label>
@@ -223,14 +226,16 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        // Preencher modal de Adicionar à Fila
         const addExameFilaModal = document.getElementById('addExameFilaModal');
         addExameFilaModal.addEventListener('show.bs.modal', event => {
             const button = event.relatedTarget;
+            const pacienteId = button.getAttribute('data-bs-id'); 
             const pacienteNome = button.getAttribute('data-bs-paciente-nome');
+            addExameFilaModal.querySelector('#filaPacienteId').value = pacienteId;
             addExameFilaModal.querySelector('#filaPacienteNome').value = pacienteNome;
             addExameFilaModal.querySelector('#filaDisplayPacienteNome').textContent = pacienteNome;
         });
+
 
         // Preencher modal de Editar Paciente
         const editPacienteModal = document.getElementById('editPacienteModal');
@@ -244,4 +249,5 @@
         });
     </script>
 </body>
+
 </html>

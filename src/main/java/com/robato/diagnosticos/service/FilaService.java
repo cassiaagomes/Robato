@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridade;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeRotina;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeUrgente;
+import com.robato.diagnosticos.prioridade.EstrategiaPrioridadePoucoUrgente;
 import com.robato.diagnosticos.prioridade.FilaDePrioridade;
 
 @Service
@@ -22,14 +23,11 @@ public class FilaService {
         EstrategiaPrioridade estrategia;
 
         switch (prioridadeStr.toUpperCase()) {
-
             case "URGENTE" -> estrategia = new EstrategiaPrioridadeUrgente();
-            case "POUCO_URGENTE" -> estrategia = new EstrategiaPrioridadeRotina(); 
+            case "POUCO_URGENTE" -> estrategia = new EstrategiaPrioridadePoucoUrgente();
             default -> estrategia = new EstrategiaPrioridadeRotina();
         }
-
-        fila.setEstrategia(estrategia);
-        fila.adicionar(tipoExame, pacienteNome);
+        fila.add(tipoExame, pacienteNome, estrategia);
     }
 
     public List<FilaDePrioridade.Item> listarExames() {
@@ -44,4 +42,3 @@ public class FilaService {
         return fila.proximo();
     }
 }
-

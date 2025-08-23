@@ -288,29 +288,6 @@ body.laudo-page {
     font-weight: 600;
 }
 
-.priority-label {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 50px;
-    color: white;
-    font-weight: bold;
-    font-size: 0.75em;
-    text-transform: uppercase;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.priority-urgente {
-    background-color: #dc3545; /* Vermelho */
-}
-
-.priority-pouco-urgente {
-    background-color: #ffc107; /* Amarelo */
-}
-
-.priority-rotina {
-    background-color: #28a745; /* Verde */
-}
-
 .no-exams {
     text-align: center;
     color: #777;
@@ -367,4 +344,35 @@ body.laudo-page {
 
 .btn-action:hover {
     opacity: 1;
+}
+
+/* Adicione ao final do seu style.css */
+
+/* ======================================================= */
+/* --- ESTILOS PARA OS INDICADORES DE PRIORIDADE NA FILA --- */
+/* ======================================================= */
+
+/* A regra base não precisa mudar */
+.badge-prioridade {
+    padding: 0.5em 0.9em;
+    font-weight: 600;
+    font-size: 0.75em;
+    border-radius: 50px;
+}
+
+/* TORNANDO AS REGRAS MAIS ESPECÍFICAS ADICIONANDO ".table td" */
+
+.table td .badge-prioridade.prioridade-urgente {
+    background-color: #dc3545; /* Vermelho */
+    color: white;
+}
+
+.table td .badge-prioridade.prioridade-pouco-urgente {
+    background-color: #fd7e14; /* Laranja */
+    color: white;
+}
+
+.table td .badge-prioridade.prioridade-rotina {
+    background-color: var(--cor-primaria); /* Azul da Sidebar */
+    color: white;
 }

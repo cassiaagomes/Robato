@@ -33,6 +33,7 @@ import com.robato.diagnosticos.laudo.TextoFormato;
 import com.robato.diagnosticos.notificacao.AssuntoNotificacao;
 import com.robato.diagnosticos.notificacao.NotificadorEmail;
 import com.robato.diagnosticos.notificacao.NotificadorWhatsapp;
+import com.robato.diagnosticos.prioridade.EstrategiaPrioridade;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeRotina;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeUrgente;
 import com.robato.diagnosticos.prioridade.FilaDePrioridade;
@@ -275,8 +276,8 @@ public class SistemaDiagnosticoFacade {
         fila.setEstrategia(new EstrategiaPrioridadeRotina());
     }
 
-    public void adicionarNaFila(String tipoExame, String paciente) {
-        fila.adicionar(tipoExame, paciente);
+    public void adicionar(String tipoExame, String paciente, EstrategiaPrioridade estrategia) {
+        fila.add(paciente, tipoExame, estrategia);
     }
 
     public FilaDePrioridade.Item proximoDaFila() {

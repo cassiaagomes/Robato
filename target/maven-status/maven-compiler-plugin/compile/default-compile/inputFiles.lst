@@ -43,6 +43,7 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\NotificadorWhatsapp.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\ObservadorNotificacao.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridade.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridadePoucoUrgente.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridadeRotina.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridadeUrgente.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\FilaDePrioridade.java
