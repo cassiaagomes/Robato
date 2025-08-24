@@ -1,12 +1,18 @@
 /* --- DEFINIÇÃO DA PALETA DE CORES E ESTILOS GLOBAIS --- */
 :root {
-    --cor-primaria: #0A2342;        /* Azul Marinho para o sidebar */
-    --cor-primaria-hover: #192A56;  /* Tom mais claro para o hover */
-    --cor-fundo: #F8F9FA;           /* Cinza bem clarinho para o conteúdo */
+    --cor-primaria: #0A2342;
+    /* Azul Marinho para o sidebar */
+    --cor-primaria-hover: #192A56;
+    /* Tom mais claro para o hover */
+    --cor-fundo: #F8F9FA;
+    /* Cinza bem clarinho para o conteúdo */
     --cor-branco: #FFFFFF;
-    --cor-texto-escuro: #212529;    /* Cinza escuro para textos */
-    --cor-texto-claro: #adb5bd;     /* Cinza claro para subtítulos */
-    --cor-destaque: #007BFF;        /* Azul para ícones e detalhes */
+    --cor-texto-escuro: #212529;
+    /* Cinza escuro para textos */
+    --cor-texto-claro: #adb5bd;
+    /* Cinza claro para subtítulos */
+    --cor-destaque: #007BFF;
+    /* Azul para ícones e detalhes */
     --sombra-suave: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -17,7 +23,7 @@ body {
     background-color: var(--cor-primaria);
     color: var(--cor-texto-escuro);
     height: 100vh;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 /* --- BARRA LATERAL (SIDEBAR) --- */
@@ -27,13 +33,13 @@ body {
     left: 0;
     z-index: 1000;
     height: 100%;
-    width: 260px; 
+    width: 260px;
     background-color: var(--cor-primaria);
     color: var(--cor-branco);
     padding: 25px 15px;
     display: flex;
     flex-direction: column;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar h2 {
@@ -84,11 +90,11 @@ body {
     margin-right: 20px;
     margin-bottom: 20px;
     height: calc(100vh - 40px);
-    overflow-y: auto; 
-    padding: 40px; 
-    background-color: var(--cor-branco); 
-    border-radius: 25px; 
-    box-shadow: var(--sombra-suave); 
+    overflow-y: auto;
+    padding: 40px;
+    background-color: var(--cor-branco);
+    border-radius: 25px;
+    box-shadow: var(--sombra-suave);
 }
 
 .content h1 {
@@ -183,7 +189,7 @@ body.laudo-page {
     margin: 0 auto 40px auto;
     padding: 50px;
     background: white;
-    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
 }
 
@@ -194,11 +200,13 @@ body.laudo-page {
     padding-bottom: 20px;
     margin-bottom: 30px;
 }
+
 .laudo-header h1 {
     color: var(--cor-primaria);
     font-weight: 700;
     margin: 0;
 }
+
 .laudo-header h2 {
     color: var(--cor-texto-escuro);
     font-size: 1.4em;
@@ -214,6 +222,7 @@ body.laudo-page {
     margin-bottom: 40px;
     font-size: 0.9em;
 }
+
 .laudo-info .info-item strong {
     display: block;
     color: #6c757d;
@@ -231,12 +240,14 @@ body.laudo-page {
     text-align: center;
     padding-top: 40px;
 }
+
 .laudo-assinatura .assinatura-linha {
     width: 300px;
     height: 1px;
     background-color: #343a40;
     margin: 0 auto 10px auto;
 }
+
 .laudo-assinatura p {
     margin: 0;
     line-height: 1.5;
@@ -247,9 +258,11 @@ body.laudo-page {
     body.laudo-page {
         background-color: white;
     }
+
     .laudo-actions {
         display: none;
     }
+
     .laudo-container {
         box-shadow: none;
         margin: 0;
@@ -276,7 +289,8 @@ body.laudo-page {
     margin-top: 20px;
 }
 
-.queue-table th, .queue-table td {
+.queue-table th,
+.queue-table td {
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
@@ -363,16 +377,182 @@ body.laudo-page {
 /* TORNANDO AS REGRAS MAIS ESPECÍFICAS ADICIONANDO ".table td" */
 
 .table td .badge-prioridade.prioridade-urgente {
-    background-color: #dc3545; /* Vermelho */
+    background-color: #dc3545;
+    /* Vermelho */
     color: white;
 }
 
 .table td .badge-prioridade.prioridade-pouco-urgente {
-    background-color: #fd7e14; /* Laranja */
+    background-color: #fd7e14;
+    /* Laranja */
     color: white;
 }
 
 .table td .badge-prioridade.prioridade-rotina {
-    background-color: var(--cor-primaria); /* Azul da Sidebar */
+    background-color: #198754;
+    /* Verde */
     color: white;
+}
+
+/* ======================================================= */
+/* --- ESTILOS PARA A PÁGINA DE PAGAMENTO --- */
+/* ======================================================= */
+
+/* Container principal do formulário de pagamento */
+.payment-form-container {
+    max-width: 850px;
+    /* Define uma largura máxima para o formulário */
+    margin: 20px auto;
+    /* Centraliza o formulário na página */
+    padding: 40px;
+    background-color: var(--cor-branco);
+    border-radius: 15px;
+    box-shadow: var(--sombra-suave);
+}
+
+/* Título da página de pagamento */
+.payment-form-container h2 {
+    color: var(--cor-primaria);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Rótulos das seções (Paciente, Exames, Descontos) */
+.payment-form-container .form-label {
+    font-weight: 600;
+    color: var(--cor-texto-escuro);
+    font-size: 1.1em;
+    margin-bottom: 1rem;
+}
+
+/* Caixa de seleção de exames com scroll */
+.exam-selection-box {
+    background-color: var(--cor-fundo);
+    /* Cinza clarinho do tema */
+    border: 1px solid #e2eaf0;
+    border-radius: 8px;
+    padding: 20px;
+    max-height: 250px;
+    /* Altura máxima antes de ativar o scroll */
+    overflow-y: auto;
+    /* Adiciona scroll vertical se a lista for longa */
+    margin-top: -10px;
+    /* Ajuste fino para alinhar com o label */
+}
+
+/* Estilo para cada item (checkbox) na lista de exames */
+.exam-selection-box .form-check {
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.exam-selection-box .form-check:hover {
+    background-color: #e9ecef;
+    /* Um pouco mais escuro no hover */
+}
+
+.exam-selection-box .form-check-label {
+    cursor: pointer;
+    /* Muda o cursor para indicar que é clicável */
+    width: 100%;
+}
+
+/* Estilo para a seção de descontos */
+.discounts-section .form-check {
+    margin-bottom: 0.5rem;
+}
+
+/* Botão de confirmação com mais destaque */
+.btn-confirm-payment {
+    padding: 12px 20px;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+/* ======================================================= */
+/* --- ESTILOS PARA A PÁGINA DE GERENCIAMENTO (MÉDICOS) --- */
+/* ======================================================= */
+
+/* Melhorias na tabela */
+.table {
+    border-collapse: separate;
+    border-spacing: 0 8px; /* Adiciona espaçamento vertical entre as linhas */
+}
+
+.table thead th {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-escuro);
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: none;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.table tbody tr {
+    background-color: var(--cor-branco);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.table tbody tr:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--sombra-suave);
+}
+
+.table tbody td {
+    border: none;
+    vertical-align: middle;
+}
+
+/* Ajustes para a primeira e última célula de cada linha (bordas arredondadas) */
+.table tbody tr td:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+.table tbody tr td:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+
+/* Estilo do Avatar (já presente, mas garantindo consistência) */
+.avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: var(--cor-primaria);
+    color: var(--cor-branco);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1.2em;
+}
+
+
+/* Estilo dos Modais (Adicionar/Editar/Importar) */
+.modal-header {
+    background-color: var(--cor-primaria);
+    color: var(--cor-branco);
+    border-bottom: none;
+}
+
+.modal-header .modal-title {
+    font-weight: 600;
+}
+
+.modal-header .btn-close {
+    background-color: var(--cor-branco);
+    border-radius: 50%;
+    opacity: 0.8;
+}
+
+.modal-footer {
+    background-color: var(--cor-fundo);
+    border-top: 1px solid #dee2e6;
 }

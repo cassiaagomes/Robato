@@ -193,6 +193,7 @@
                     <form th:action="@{/fila/adicionar}" method="post">
                         <input type="hidden" name="pacienteId" id="filaPacienteId">
                         <input type="hidden" name="pacienteNome" id="filaPacienteNome">
+                        <input type="hidden" name="convenio" id="filaPacienteConvenio">
                         <div class="mb-3">
                             <label class="form-label">Paciente:</label>
                             <p class="fw-bold" id="filaDisplayPacienteNome"></p>
@@ -231,9 +232,11 @@
             const button = event.relatedTarget;
             const pacienteId = button.getAttribute('data-bs-id'); 
             const pacienteNome = button.getAttribute('data-bs-paciente-nome');
+            const pacienteConvenio = button.getAttribute('data-bs-paciente-convenio');
             addExameFilaModal.querySelector('#filaPacienteId').value = pacienteId;
             addExameFilaModal.querySelector('#filaPacienteNome').value = pacienteNome;
             addExameFilaModal.querySelector('#filaDisplayPacienteNome').textContent = pacienteNome;
+            addExameFilaModal.querySelector('#filaPacienteConvenio').value = pacienteConvenio;
         });
 
 

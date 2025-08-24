@@ -14,21 +14,9 @@ public class LaudoCompleto {
     private String medicoResponsavel;
     private String crmResponsavel;
     private LocalDate data;
+    private List<ResultadoExameItem> resultados; 
+    private String observacoes; 
 
-    // =======================================================
-    // ===== CAMPOS ANTIGOS REMOVIDOS =====
-    // private String resultado;
-    // private String diagnostico;
-    // =======================================================
-
-    // =======================================================
-    // ===== NOVOS CAMPOS ADICIONADOS =====
-    // =======================================================
-    private List<ResultadoExameItem> resultados; // Para a tabela de resultados
-    private String observacoes; // Para o texto de diagnóstico/observações
-
-    
-    // --- Getters e Setters ---
 
     public int getNumeroExame() { return numeroExame; }
     public void setNumeroExame(int numeroExame) { this.numeroExame = numeroExame; }
@@ -51,9 +39,6 @@ public class LaudoCompleto {
     public LocalDate getData() { return data; }
     public void setData(LocalDate data) { this.data = data; }
 
-    // =======================================================
-    // ===== NOVOS GETTERS E SETTERS ADICIONADOS =====
-    // =======================================================
     public List<ResultadoExameItem> getResultados() {
         return resultados;
     }

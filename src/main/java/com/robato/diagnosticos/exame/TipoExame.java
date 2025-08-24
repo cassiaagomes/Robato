@@ -1,12 +1,12 @@
 package com.robato.diagnosticos.exame;
 
 public enum TipoExame {
-    // Tipos compostos e de imagem
+    HEMOGRAMA,
     HEMOGRAMA_AGRUPADO,
-    RAIOX,
+    RAIO_X,
     RESSONANCIA,
     HEMOGRAMA_COMPLETO,
-    GLICEMIA,
+    GLICOSE,
     SOROLOGIA,
     UREIA,
     CREATININA,

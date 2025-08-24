@@ -23,8 +23,9 @@ public class FilaController {
     public String adicionarFila(@RequestParam Long pacienteId,
                                 @RequestParam String pacienteNome,
                                 @RequestParam String tipoExame,
+                                @RequestParam String convenio,
                                 @RequestParam String prioridade) {
-        filaService.adicionarExame(pacienteId, pacienteNome, tipoExame, prioridade);
+        filaService.adicionarExame(pacienteId, pacienteNome, tipoExame, convenio, prioridade);
         return "redirect:/fila?mensagemSucesso=Exame+adicionado+à+fila";
     }
 

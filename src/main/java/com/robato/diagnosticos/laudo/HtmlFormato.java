@@ -39,7 +39,7 @@ public class HtmlFormato implements FormatoLaudo {
                 sb.append("<td>").append(item.getIndicador()).append("</td>");
                 sb.append("<td><b>").append(item.getResultado()).append("</b></td>");
                 sb.append("<td>").append(item.getUnidade()).append("</td>");
-                sb.append("<td>").append(item.getReferencia()).append("</td>");
+                sb.append("<td>").append(item.getValorReferencia()).append("</td>");
                 sb.append("</tr>");
             }
         } else {

@@ -5,17 +5,13 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\DescontoOutubroRosa.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Medico.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Paciente.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\BilirrubinaTotal.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Calcio.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\ColesterolTotal.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Creatinina.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\ExameBase.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\ExameComponent.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\ExameFactory.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Fosforo.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\GamaGt.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Glicemia.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Glicose.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\HDL.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Hemograma.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\HemogramaAgrupado.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\HemogramaCompleto.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\LDL.java
@@ -49,6 +45,7 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\FilaDePrioridade.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\RobatoApplication.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\FilaService.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\MedicoService.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\PacienteService.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorBase.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorCreatinina.java
@@ -64,4 +61,8 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\dto\ValidacaoRequest.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\ExameViewController.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\FilaController.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\MedicoController.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\NotificacaoSimulacaoController.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\PacienteViewController.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\web\PagamentoController.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\javax\servlet\http\HttpServletRequest.java

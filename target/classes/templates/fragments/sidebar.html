@@ -1,6 +1,6 @@
 <div th:fragment="sidebar" class="sidebar">
     <h2>ROBATO</h2>
-    
+
     <ul class="nav-list">
         <li>
             <a th:href="@{/}" th:classappend="${currentUri == '/' ? 'active' : ''}">
@@ -32,16 +32,20 @@
                 <span>Médicos</span>
             </a>
         </li>
-    </ul>
-    
-    <hr>
-    
-    <ul class="nav-list">
         <li>
-            <a th:href="@{/sobre}" th:classappend="${currentUri.startsWith('/sobre') ? 'active' : ''}">
-                <i class="fa-solid fa-circle-info"></i>
-                <span>Sobre</span>
+            <a th:href="@{/pagamentos}" th:classappend="${currentUri.startsWith('/pagamentos') ? 'active' : ''}">
+                <i class="fa-solid fa-dollar-sign"></i>
+                <span>Pagamentos</span>
+            </a>
+        </li>
+        <li>
+            <a th:href="@{/notificacoes}" th:classappend="${currentUri.startsWith('/notificacoes') ? 'active' : ''}">
+                <i class="fa-solid fa-bell"></i>
+                <span>Notificações</span>
             </a>
         </li>
     </ul>
+
+    <hr>
+
 </div>

@@ -121,15 +121,25 @@ public class SistemaDiagnosticoFacade {
     public LaudoCompleto construirLaudo(LaudoRequest req) {
         ExameComponent examePrincipal;
         ValidacaoContexto ctx = req.getContexto() != null ? req.getContexto() : new ValidacaoContexto();
+
+        // Verificação de segurança para o tipoExame
+        if (req.getTipoExame() == null || req.getTipoExame().trim().isEmpty()) {
+            throw new IllegalArgumentException("Tipo de exame não pode ser nulo ou vazio");
+        }
+
         TipoExame tipoPrincipal = TipoExame.valueOf(req.getTipoExame().toUpperCase());
 
         if (tipoPrincipal == TipoExame.HEMOGRAMA_AGRUPADO) {
             HemogramaAgrupado exameComposto = (HemogramaAgrupado) ExameFactory.criar(tipoPrincipal);
             if (req.getSubExamesSelecionados() != null && !req.getSubExamesSelecionados().isEmpty()) {
                 for (String nomeSubExame : req.getSubExamesSelecionados()) {
-                    TipoExame tipoSubExame = TipoExame.valueOf(nomeSubExame.toUpperCase());
-                    ExameComponent subExame = ExameFactory.criar(tipoSubExame);
-                    exameComposto.adicionar(subExame);
+                    try {
+                        TipoExame tipoSubExame = TipoExame.valueOf(nomeSubExame.toUpperCase());
+                        ExameComponent subExame = ExameFactory.criar(tipoSubExame);
+                        exameComposto.adicionar(subExame);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Tipo de exame não encontrado: " + nomeSubExame + " - Será ignorado");
+                    }
                 }
             }
             examePrincipal = exameComposto;
@@ -141,11 +151,53 @@ public class SistemaDiagnosticoFacade {
         int numero = sequencial.proximo();
         String diagnostico = ctx.getDiagnostico() != null ? ctx.getDiagnostico() : "Sem observações.";
 
+        List<ResultadoExameItem> todosOsResultados = ctx.getResultados();
+        List<String> subExamesSelecionados = req.getSubExamesSelecionados();
+        List<ResultadoExameItem> resultadosFiltrados = new ArrayList<>();
+
+        // Debug: mostrar o que estamos recebendo
+        System.out.println(">>> Subexames selecionados: " + subExamesSelecionados);
+        System.out.println(">>> Total de resultados no contexto: " +
+                (todosOsResultados != null ? todosOsResultados.size() : 0));
+
+        if (subExamesSelecionados != null && !subExamesSelecionados.isEmpty() && todosOsResultados != null) {
+            resultadosFiltrados = todosOsResultados.stream()
+                    .filter(resultado -> {
+                        boolean contem = subExamesSelecionados.contains(resultado.getNomeExame());
+                        if (!contem) {
+                            System.out.println(">>> Exame filtrado: " + resultado.getNomeExame() +
+                                    " (não está em: " + subExamesSelecionados + ")");
+                        }
+                        return contem;
+                    })
+                    .collect(java.util.stream.Collectors.toList());
+
+            System.out.println(">>> Resultados após filtro: " + resultadosFiltrados.size());
+        } else if (todosOsResultados != null) {
+            resultadosFiltrados.addAll(todosOsResultados);
+            System.out.println(">>> Todos os resultados incluídos (sem filtro): " + resultadosFiltrados.size());
+        }
+
+        // Se não há resultados, criar lista vazia para evitar null pointer
+        if (resultadosFiltrados == null) {
+            resultadosFiltrados = new ArrayList<>();
+        }
+
+        // Debug: mostrar os resultados que serão incluídos no laudo
+        if (!resultadosFiltrados.isEmpty()) {
+            System.out.println(">>> Exames que serão incluídos no laudo:");
+            for (ResultadoExameItem item : resultadosFiltrados) {
+                System.out.println(">>> - " + item.getNomeExame() + ": " + item.getValor() + " " + item.getUnidade());
+            }
+        } else {
+            System.out.println(">>> Nenhum exame será incluído no laudo");
+        }
+
         return new LaudoBuilder()
                 .numero(numero)
                 .paciente(req.getPacienteNome(), req.getConvenio())
                 .medico(req.getMedicoSolicitante(), req.getMedicoResponsavel(), req.getCrmResponsavel())
-                .resultados(ctx.getResultados())
+                .resultados(resultadosFiltrados)
                 .observacoes(diagnostico)
                 .data(LocalDate.now())
                 .build();
@@ -161,89 +213,32 @@ public class SistemaDiagnosticoFacade {
         return laudo.gerarLaudo(laudoCompleto);
     }
 
-    public LaudoRequest parseCsvParaLaudoRequest(InputStream csvInputStream)
+    public List<ResultadoExameItem> parseResultadosCsv(InputStream csvInputStream)
             throws IOException, CsvValidationException {
-        LaudoRequest request = new LaudoRequest();
-        ValidacaoContexto contexto = new ValidacaoContexto();
-
+        List<ResultadoExameItem> resultados = new ArrayList<>();
         try (CSVReader reader = new CSVReader(new InputStreamReader(csvInputStream))) {
-            List<ResultadoExameItem> resultados = new ArrayList<>();
             String[] header = reader.readNext();
+            if (header == null || !header[0].trim().equalsIgnoreCase("Exame")) {
+                throw new CsvValidationException("Formato de CSV inválido.");
+            }
 
-            if (header != null && header.length > 1 && header[0].trim().equalsIgnoreCase("chave")) {
-                String[] nextLine;
-                while ((nextLine = reader.readNext()) != null) {
-                    if (nextLine.length < 2)
-                        continue;
-                    String chave = nextLine[0].trim();
-                    String valor = nextLine[1].trim();
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                if (nextLine.length < 4)
+                    continue;
 
-                    switch (chave) {
-                        case "tipoExame":
-                            request.setTipoExame(valor);
-                            break;
-                        case "formato":
-                            request.setFormato(valor);
-                            break;
-                        case "pacienteNome":
-                            request.setPacienteNome(valor);
-                            break;
-                        case "convenio":
-                            request.setConvenio(valor);
-                            break;
-                        case "medicoSolicitante":
-                            request.setMedicoSolicitante(valor);
-                            break;
-                        case "medicoResponsavel":
-                            request.setMedicoResponsavel(valor);
-                            break;
-                        case "crmResponsavel":
-                            request.setCrmResponsavel(valor);
-                            break;
-                        case "contexto.valor":
-                            contexto.setValor(Double.parseDouble(valor));
-                            break;
-                        case "contexto.unidade":
-                            contexto.setUnidade(valor);
-                            break;
-                        case "contexto.idade":
-                            contexto.setIdade(Integer.parseInt(valor));
-                            break;
-                        case "contexto.sexo":
-                            contexto.setSexo(valor);
-                            break;
-                        case "contexto.pacienteComImplantesMetalicos":
-                            contexto.setPacienteComImplantesMetalicos(Boolean.parseBoolean(valor));
-                            break;
-                        case "contexto.radiologistaAssinatura":
-                            contexto.setRadiologistaAssinatura(valor);
-                            break;
-                        case "contexto.protocolo":
-                            contexto.setProtocolo(valor);
-                            break;
-                        case "contexto.usouContraste":
-                            contexto.setUsouContraste(Boolean.parseBoolean(valor));
-                            break;
-                        case "contexto.contraste":
-                            contexto.setContraste(valor);
-                            break;
-                        case "contexto.doseContraste":
-                            contexto.setDoseContraste(valor);
-                            break;
-                    }
+                String nomeExame = nextLine[0].trim();
+
+                try {
+                    TipoExame.valueOf(nomeExame.toUpperCase());
+                    resultados.add(new ResultadoExameItem(nomeExame, nextLine[1], nextLine[2], nextLine[3], ""));
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Exame ignorado (não corresponde ao enum): " + nomeExame);
                 }
-            } else if (header != null && header.length > 1 && header[0].trim().equalsIgnoreCase("Exame")) {
-                String[] nextLine;
-                while ((nextLine = reader.readNext()) != null) {
-                    if (nextLine.length < 4)
-                        continue;
-                    resultados.add(new ResultadoExameItem(nextLine[0], nextLine[1], nextLine[2], nextLine[3]));
-                }
-                contexto.setResultados(resultados);
             }
         }
-        request.setContexto(contexto);
-        return request;
+        System.out.println(">>> CSV parseado: " + resultados.size() + " resultados válidos");
+        return resultados;
     }
 
     public void notificarPaciente(String mensagem, String destino) {
@@ -276,8 +271,8 @@ public class SistemaDiagnosticoFacade {
         fila.setEstrategia(new EstrategiaPrioridadeRotina());
     }
 
-    public void adicionar(String tipoExame, String paciente, EstrategiaPrioridade estrategia) {
-        fila.add(paciente, tipoExame, estrategia);
+    public void adicionar(String tipoExame, String paciente, String convenio, EstrategiaPrioridade estrategia) {
+        fila.add(paciente, tipoExame, convenio, estrategia);
     }
 
     public FilaDePrioridade.Item proximoDaFila() {
@@ -302,5 +297,35 @@ public class SistemaDiagnosticoFacade {
 
     public void adicionarPaciente(Paciente novoPaciente) {
         listarPacientes().put(novoPaciente.getNome(), novoPaciente);
+    }
+
+    // Na sua SistemaDiagnosticoFacade, adicione:
+    public double calcularCustoTotal(List<TipoExame> tiposExames, boolean comConvenio, boolean ehIdoso) {
+        // Implemente a lógica de cálculo de custos aqui
+        double total = 0.0;
+        for (TipoExame tipo : tiposExames) {
+            total += 100.0; // Valor exemplo - ajuste conforme necessário
+        }
+
+        // Aplicar descontos
+        if (comConvenio) {
+            total *= 0.85; // 15% de desconto
+        }
+        if (ehIdoso) {
+            total *= 0.9; // 10% de desconto para idosos
+        }
+
+        return total;
+    }
+
+    public void registrarPagamento(String pacienteNome, double valorPago) {
+        // Em um sistema real, isso salvaria no banco de dados.
+        // Para este projeto, podemos apenas simular com uma saída no console.
+        System.out.println("======================================");
+        System.out.println("COMPROVANTE DE PAGAMENTO");
+        System.out.println("Paciente: " + pacienteNome);
+        System.out.printf("Valor Pago: R$ %.2f\n", valorPago);
+        System.out.println("Data: " + java.time.LocalDate.now());
+        System.out.println("======================================");
     }
 }

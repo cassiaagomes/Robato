@@ -30,7 +30,7 @@ public class TextoFormato implements FormatoLaudo {
                     item.getIndicador(),
                     item.getResultado(),
                     item.getUnidade(),
-                    item.getReferencia()
+                    item.getValorReferencia()
                 ));
             }
         } else {

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registros - Robato Diagnósticos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- Custom CSS -->
+    <link href="/css/style.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Adicione a sidebar -->
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    
+    <div class="content">
+        <div class="page-header mb-4">
+            <h1><i class=""></i>Registrar Pagamento de Exames</h1>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <form th:action="@{/pagamentos/confirmar}" method="post">
+                    <div class="mb-3">
+                        <label for="paciente" class="form-label">Paciente:</label>
+                        <select id="paciente" name="pacienteNome" class="form-select" required>
+                            <option value="">Selecione um paciente...</option>
+                            <option th:each="paciente : ${pacientes}" 
+                                    th:value="${paciente.nome}" 
+                                    th:text="${paciente.nome}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Exames a Realizar:</label>
+                        <div class="border p-3">
+                            <div th:each="exame : ${tiposExame}" class="form-check">
+                                <input class="form-check-input" type="checkbox" 
+                                       th:value="${exame}" 
+                                       name="nomesExames"
+                                       th:id="${'exame-' + exame}">
+                                <label class="form-check-label" 
+                                       th:for="${'exame-' + exame}"
+                                       th:text="${exame}"> <!-- Use o enum diretamente -->
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Descontos Aplicáveis:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="comConvenio" name="comConvenio" value="true">
+                            <label class="form-check-label" for="comConvenio">Possui Convênio (15%)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="ehIdoso" name="ehIdoso" value="true">
+                            <label class="form-check-label" for="ehIdoso">Paciente Idoso (8%)</label>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a th:href="@{/pagamentos}" class="btn btn-secondary me-md-2">Cancelar</a>
+                        <button type="submit" class="btn btn-primary">Confirmar Pagamento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

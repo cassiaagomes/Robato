@@ -9,11 +9,13 @@ public class FilaDePrioridade {
     public static class Item {
         private String pacienteNome;
         private String tipoExame;
+        private String convenio;
         private EstrategiaPrioridade prioridade; // <-- nova
 
-        public Item(String pacienteNome, String tipoExame, EstrategiaPrioridade prioridade) {
+        public Item(String pacienteNome, String tipoExame, String convenio, EstrategiaPrioridade prioridade) {
             this.pacienteNome = pacienteNome;
             this.tipoExame = tipoExame;
+            this.convenio = convenio;
             this.prioridade = prioridade;
         }
 
@@ -27,6 +29,10 @@ public class FilaDePrioridade {
 
         public EstrategiaPrioridade getPrioridade() {
             return prioridade;
+        }
+        
+        public String getConvenio() {
+            return convenio;
         }
 
         public String getPrioridadeComoString() {
@@ -54,8 +60,8 @@ public class FilaDePrioridade {
         this.estrategia = e;
     }
 
-   public void add(String tipoExame, String paciente, EstrategiaPrioridade prioridade) {
-        fila.add(new Item(paciente, tipoExame, prioridade));
+   public void add(String tipoExame, String paciente, String convenio, EstrategiaPrioridade prioridade) {
+        fila.add(new Item(paciente, tipoExame, convenio, prioridade));
     }
     
 
@@ -68,6 +74,11 @@ public class FilaDePrioridade {
     }
 
     public List<Item> listarExames() {
-        return new ArrayList<>(fila);
+        PriorityQueue<Item> copiaFila = new PriorityQueue<>(fila);
+        List<Item> listaOrdenada = new ArrayList<>();
+        while (!copiaFila.isEmpty()) {
+            listaOrdenada.add(copiaFila.poll());
+        }
+        return listaOrdenada;
     }
 }

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Médicos - Robato Diagnósticos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link href="/css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
+
+    <div class="content">
+        <!-- Header -->
+        <div class="page-header mb-4 d-flex justify-content-between align-items-center">
+            <h1>Médicos</h1>
+            <div>
+                <button type="button" class="btn btn-outline-secondary me-2" data-bs-toggle="modal" data-bs-target="#importCsvModal">
+                    <i class="fa-solid fa-file-import me-2"></i>Importar CSV
+                </button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMedicoModal">
+                    <i class="fa-solid fa-plus me-2"></i>Adicionar Médico
+                </button>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <div th:if="${param.adicionado}" class="alert alert-success alert-dismissible fade show" role="alert">
+            Médico adicionado com sucesso!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${param.importado}" class="alert alert-info alert-dismissible fade show" role="alert">
+            Médicos importados com sucesso!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <!-- Card de médicos -->
+        <div class="card">
+            <!-- Busca -->
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Lista de Médicos</h5>
+                <div class="w-25">
+                    <input type="search" class="form-control" placeholder="Buscar médico..." th:onkeyup="filtrarMedicos(this.value)">
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive" th:if="${medicos != null and !medicos.isEmpty()}">
+                    <table class="table table-hover align-middle" id="tabelaMedicos">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;"><input class="form-check-input" type="checkbox" onclick="selecionarTodos(this)"></th>
+                                <th>Médico</th>
+                                <th>CRM</th>
+                                <th>Especialidade</th>
+                                <th>Telefone</th>
+                                <th class="text-end">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="medico : ${medicos}">
+                                <td><input class="form-check-input" type="checkbox" th:value="${medico.id}"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-placeholder me-3"
+                                            th:text="${#strings.substring(medico.nome, 0, 1)}"></div>
+                                        <div>
+                                            <div class="fw-bold" th:text="${medico.nome}"></div>
+                                            <div class="text-muted" th:text="${medico.email}"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td th:text="${medico.crm}"></td>
+                                <td th:text="${medico.especialidade}"></td>
+                                <td th:text="${medico.telefone}"></td>
+                                <td class="text-end">
+                                    <!-- Botão Editar -->
+                                    <button type="button" class="btn btn-sm btn-outline-warning me-2"
+                                        data-bs-toggle="modal" data-bs-target="#editMedicoModal"
+                                        th:attr="data-bs-id=${medico.id},data-bs-nome=${medico.nome},data-bs-email=${medico.email},data-bs-telefone=${medico.telefone},data-bs-crm=${medico.crm},data-bs-especialidade=${medico.especialidade}">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </button>
+
+                                    <!-- Botão Excluir -->
+                                    <form th:action="@{/medicos/excluir/{id}(id=${medico.id})}" method="post"
+                                        style="display:inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                            onclick="return confirm('Tem certeza que deseja excluir este médico?');">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p th:if="${medicos == null or medicos.isEmpty()}" class="text-center text-muted mt-4">
+                    Nenhum médico cadastrado.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Médico -->
+    <div class="modal fade" id="addMedicoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Novo Médico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/medicos/salvar}" method="post">
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome Completo:</label>
+                            <input type="text" class="form-control" id="nome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="crm" class="form-label">CRM:</label>
+                            <input type="text" class="form-control" id="crm" name="crm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="especialidade" class="form-label">Especialidade:</label>
+                            <input type="text" class="form-control" id="especialidade" name="especialidade">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Salvar Médico</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Médico -->
+    <div class="modal fade" id="editMedicoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Editar Médico</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/medicos/atualizar}" method="post">
+                        <input type="hidden" id="edit-id" name="id">
+                        <div class="mb-3">
+                            <label for="edit-nome" class="form-label">Nome:</label>
+                            <input type="text" class="form-control" id="edit-nome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-crm" class="form-label">CRM:</label>
+                            <input type="text" class="form-control" id="edit-crm" name="crm" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-especialidade" class="form-label">Especialidade:</label>
+                            <input type="text" class="form-control" id="edit-especialidade" name="especialidade">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-email" class="form-label">Email:</label>
+                            <input type="email" class="form-control" id="edit-email" name="email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-telefone" class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" id="edit-telefone" name="telefone">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Importar CSV -->
+    <div class="modal fade" id="importCsvModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Importar Médicos via CSV</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/medicos/importar-csv}" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="arquivoCsv" class="form-label">Selecionar arquivo CSV:</label>
+                            <input type="file" class="form-control" id="arquivoCsv" name="arquivo" accept=".csv" required>
+                        </div>
+                        <div class="alert alert-info">
+                            <h6><i class="fa-solid fa-info-circle me-2"></i>Formato do CSV:</h6>
+                            <small>
+                                nome,crm,especialidade,email,telefone<br>
+                                Dr. João Silva,12345-SP,Cardiologia,joao@email.com,11999999999<br>
+                                Dra. Maria Santos,54321-MG,Pediatria,maria@email.com,11888888888
+                            </small>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Importar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Preencher modal de Editar Médico
+        const editMedicoModal = document.getElementById('editMedicoModal');
+        editMedicoModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            document.getElementById('edit-id').value = button.getAttribute('data-bs-id');
+            document.getElementById('edit-nome').value = button.getAttribute('data-bs-nome');
+            document.getElementById('edit-crm').value = button.getAttribute('data-bs-crm');
+            document.getElementById('edit-especialidade').value = button.getAttribute('data-bs-especialidade');
+            document.getElementById('edit-email').value = button.getAttribute('data-bs-email');
+            document.getElementById('edit-telefone').value = button.getAttribute('data-bs-telefone');
+        });
+
+        // Filtrar médicos
+        function filtrarMedicos(termo) {
+            const tabela = document.getElementById('tabelaMedicos');
+            const linhas = tabela.getElementsByTagName('tr');
+            
+            for (let i = 1; i < linhas.length; i++) {
+                const cells = linhas[i].getElementsByTagName('td');
+                let encontrou = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().includes(termo.toLowerCase())) {
+                        encontrou = true;
+                        break;
+                    }
+                }
+                
+                linhas[i].style.display = encontrou ? '' : 'none';
+            }
+        }
+
+        // Selecionar todos os checkboxes
+        function selecionarTodos(checkbox) {
+            const checkboxes = document.querySelectorAll('#tabelaMedicos tbody input[type="checkbox"]');
+            checkboxes.forEach(cb => cb.checked = checkbox.checked);
+        }
+    </script>
+</body>
+</html>

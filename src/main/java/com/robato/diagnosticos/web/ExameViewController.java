@@ -41,19 +41,38 @@ public class ExameViewController {
         stats.put("medicosAtivos", facade.listarMedicos().size());
         model.addAttribute("stats", stats);
         model.addAttribute("tipos", TipoExame.values());
-        model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("currentUri", request.getRequestURI()); // Adicionado
         return "dashboard";
     }
 
     @GetMapping("/exames/novo")
-    public String novo(Model model, @ModelAttribute("laudoRequest") LaudoRequest laudoRequest,
+    public String novo(Model model, @ModelAttribute("laudoRequest") LaudoRequest laudoRequest, HttpSession session,
             HttpServletRequest request) {
-        if (laudoRequest == null || laudoRequest.getTipoExame() == null) {
+        LaudoRequest laudoNaSessao = (LaudoRequest) session.getAttribute("laudoRequestAtual");
+        if (laudoNaSessao != null) {
+            model.addAttribute("laudoRequest", laudoNaSessao);
+        } else if (laudoRequest == null || laudoRequest.getTipoExame() == null) {
             model.addAttribute("laudoRequest", new LaudoRequest());
         }
         model.addAttribute("tipos", TipoExame.values());
-        model.addAttribute("currentUri", request.getRequestURI());
+        model.addAttribute("currentUri", request.getRequestURI()); // Adicionado
         return "exames";
+    }
+
+    @GetMapping("/exames/novo/preencher")
+    public String preencherNovoLaudo(@RequestParam String pacienteNome,
+            @RequestParam String tipoExame,
+            @RequestParam String convenio, // Parâmetro adicionado
+            HttpSession session, RedirectAttributes redirectAttributes) {
+        LaudoRequest laudoRequest = new LaudoRequest();
+        laudoRequest.setPacienteNome(pacienteNome);
+        laudoRequest.setTipoExame(tipoExame);
+        laudoRequest.setConvenio(convenio); // Campo adicionado
+
+        session.setAttribute("laudoRequestAtual", laudoRequest);
+
+        redirectAttributes.addFlashAttribute("laudoRequest", laudoRequest);
+        return "redirect:/exames/novo";
     }
 
     @GetMapping("/exames/importar-pagina")
@@ -70,11 +89,18 @@ public class ExameViewController {
             return "redirect:/exames/importar-pagina";
         }
         try {
-            LaudoRequest dadosDoCsv = facade.parseCsvParaLaudoRequest(file.getInputStream());
-            session.setAttribute("resultadosDoCsv", dadosDoCsv.getContexto().getResultados());
+            // Usar o método parseResultadosCsv em vez de parseCsvParaLaudoRequest
+            List<ResultadoExameItem> resultadosDoCsv = facade.parseResultadosCsv(file.getInputStream());
+
+            System.out.println(">>> CSV parseado com " + resultadosDoCsv.size() + " resultados");
+
+            // Salvar os resultados na sessão
+            session.setAttribute("resultadosDoCsv", resultadosDoCsv);
+
             redirectAttributes.addFlashAttribute("sucesso",
                     "Resultados do CSV importados! Preencha os dados do paciente e gere o laudo.");
         } catch (Exception e) {
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("erro", "Erro ao processar o CSV: " + e.getMessage());
         }
         return "redirect:/exames/novo";
@@ -84,33 +110,55 @@ public class ExameViewController {
     public String gerarLaudo(@ModelAttribute LaudoRequest req, Model model, HttpSession session,
             HttpServletRequest request) {
         try {
+            // Recuperar resultados do CSV da sessão
             @SuppressWarnings("unchecked")
             List<ResultadoExameItem> resultadosSalvos = (List<ResultadoExameItem>) session
                     .getAttribute("resultadosDoCsv");
 
+            // Se não há resultados na sessão, verificar se há no request
+            if (resultadosSalvos == null && req.getContexto() != null && req.getContexto().getResultados() != null) {
+                resultadosSalvos = req.getContexto().getResultados();
+            }
+
+            // Garantir que o contexto existe
             if (req.getContexto() == null) {
                 req.setContexto(new ValidacaoContexto());
             }
-            if (resultadosSalvos != null) {
+
+            // Se temos resultados, colocá-los no contexto
+            if (resultadosSalvos != null && !resultadosSalvos.isEmpty()) {
                 req.getContexto().setResultados(resultadosSalvos);
+                System.out.println(">>> Resultados a serem processados: " + resultadosSalvos.size());
             }
 
+            // Debug: verificar o que está no request
+            System.out.println(">>> TipoExame: " + req.getTipoExame());
+            System.out.println(">>> Resultados no contexto: " +
+                    (req.getContexto().getResultados() != null ? req.getContexto().getResultados().size() : 0));
+
+            // Gera o objeto do laudo
             LaudoCompleto laudoObjeto = facade.construirLaudo(req);
-            String laudoFormatado = facade.formatarLaudo(laudoObjeto, req.getFormato());
 
-            model.addAttribute("laudo", laudoFormatado);
+            // Debug: verificar o que foi construído
+            System.out.println(">>> Resultados no laudoObjeto: " +
+                    (laudoObjeto.getResultados() != null ? laudoObjeto.getResultados().size() : 0));
+            model.addAttribute("laudo", laudoObjeto); // ← Objeto LaudoCompleto
             model.addAttribute("tipoExame", req.getTipoExame());
-            model.addAttribute("pacienteNome", req.getPacienteNome());
-            model.addAttribute("convenio", req.getConvenio());
-            model.addAttribute("medicoSolicitante", req.getMedicoSolicitante());
-            model.addAttribute("medicoResponsavel", req.getMedicoResponsavel());
-            model.addAttribute("crmResponsavel", req.getCrmResponsavel());
 
+            // Mantém os atributos individuais para compatibilidade com o template
+            model.addAttribute("pacienteNome", laudoObjeto.getPaciente());
+            model.addAttribute("convenio", laudoObjeto.getConvenio());
+            model.addAttribute("medicoSolicitante", laudoObjeto.getMedicoSolicitante());
+            model.addAttribute("medicoResponsavel", laudoObjeto.getMedicoResponsavel());
+            model.addAttribute("crmResponsavel", laudoObjeto.getCrmResponsavel());
+
+            // Remove resultados temporários da sessão
             session.removeAttribute("resultadosDoCsv");
-
             model.addAttribute("currentUri", request.getRequestURI());
+
             return "laudo";
         } catch (Exception e) {
+            e.printStackTrace(); // Para ver o stack trace completo
             model.addAttribute("erro", "Erro ao gerar laudo: " + e.getMessage());
             model.addAttribute("laudoRequest", req);
             model.addAttribute("tipos", TipoExame.values());
@@ -118,7 +166,8 @@ public class ExameViewController {
             return "exames";
         }
     }
- 
+
     
 
+   
 }

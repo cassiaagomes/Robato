@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridade;
+import com.robato.diagnosticos.prioridade.EstrategiaPrioridadePoucoUrgente;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeRotina;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeUrgente;
-import com.robato.diagnosticos.prioridade.EstrategiaPrioridadePoucoUrgente;
 import com.robato.diagnosticos.prioridade.FilaDePrioridade;
 
 @Service
@@ -19,19 +19,20 @@ public class FilaService {
         this.fila = new FilaDePrioridade(new EstrategiaPrioridadeRotina());
     }
 
-    public void adicionarExame(Long pacienteId, String pacienteNome, String tipoExame, String prioridadeStr) {
+    public void adicionarExame(Long pacienteId, String pacienteNome, String tipoExame, String convenio, String prioridadeStr) {
         EstrategiaPrioridade estrategia;
 
         switch (prioridadeStr.toUpperCase()) {
             case "URGENTE" -> estrategia = new EstrategiaPrioridadeUrgente();
-            case "POUCO_URGENTE" -> estrategia = new EstrategiaPrioridadePoucoUrgente();
+            case "POUCO_URGENTE" -> estrategia = new EstrategiaPrioridadePoucoUrgente(); 
             default -> estrategia = new EstrategiaPrioridadeRotina();
         }
-        fila.add(tipoExame, pacienteNome, estrategia);
+        fila.add(tipoExame, pacienteNome, convenio, estrategia);
     }
 
+
     public List<FilaDePrioridade.Item> listarExames() {
-        return fila.listarExames();
+        return fila.listarExames(); 
     }
 
     public int tamanhoFila() {

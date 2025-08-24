@@ -75,7 +75,18 @@ public class CsvLoader {
                 while ((line = br.readLine()) != null) {
                     if (line.trim().isEmpty() || line.startsWith("#")) continue;
                     String[] p = line.split(",", -1);
-                    Medico m = new Medico(p[0].trim(), p[1].trim());
+                    if (p.length < 6) {
+                        System.err.println("Linha mal formatada no CSV de medicos: " + line);
+                        continue;
+                    }
+                    Medico m = new Medico(
+                        Long.parseLong(p[0].trim()),
+                        p[1].trim(),
+                        p[2].trim(),
+                        p[3].trim(),
+                        p[4].trim(),
+                        p[5].trim()
+                    );
                     medicos.put(m.getNome(), m);
                 }
             }
