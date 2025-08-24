@@ -2,8 +2,10 @@ package com.robato.diagnosticos.service;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,11 @@ public class PacienteService {
         paciente.setId(id);
         pacientes.put(id, paciente);
         return paciente;
+    }
+
+    public List<Paciente> listarTodos() {
+        return pacientes.values().stream()
+                .collect(Collectors.toList());
     }
 
     public Paciente buscarPorId(Long id) {

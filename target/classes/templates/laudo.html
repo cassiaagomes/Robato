@@ -24,6 +24,16 @@
         </button>
     </div>
 
+    <div class="notificacoes-enviadas mt-4 mb-4">
+        <div class="alert alert-success">
+            <h5><i class="fa-solid fa-check-circle me-2"></i>Notificações Enviadas com Sucesso!</h5>
+            <p><strong>Email:</strong> <span th:text="${emailPaciente}"></span></p>
+            <p><strong>WhatsApp:</strong> <span th:text="${telefonePaciente}"></span></p>
+            <p class="mb-0">O paciente foi notificado sobre a disponibilidade do exame.</p>
+        </div>
+    </div>
+
+
     <div class="laudo-container">
 
         <header class="laudo-header">

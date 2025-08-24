@@ -3,6 +3,8 @@ package com.robato.diagnosticos.notificacao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+@Component
 public class AssuntoNotificacao {
     private final List<ObservadorNotificacao> obs = new ArrayList<>();
 

@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Gerar Novo Laudo</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
     <link href="/css/style.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
     <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
     <div class="content">
-        
+
         <div class="page-header mb-4">
             <h1>Gerar Novo Laudo</h1>
             <a th:href="@{/exames/importar-pagina}" class="btn btn-outline-primary">
@@ -25,14 +27,56 @@
         </div>
 
         <form th:action="@{/exames/gerar}" th:object="${laudoRequest}" method="post" enctype="multipart/form-data">
-            
+
+            <!-- Seção de Seleção do Paciente -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Dados do Paciente</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="pacienteId" class="form-label">Selecionar Paciente:</label>
+                            <select id="pacienteId" name="pacienteId" class="form-select"
+                                th:value="${laudoRequest?.pacienteId}">
+                                <option value="">-- Selecione um paciente --</option>
+                                <option th:each="paciente : ${pacientes}" th:value="${paciente.id}"
+                                    th:text="${paciente.nome + ' - ' + paciente.convenio}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Campos hidden para armazenar os dados do paciente -->
+                    <input type="hidden" name="pacienteNome" th:value="${laudoRequest?.pacienteNome}">
+                    <input type="hidden" name="emailPaciente" th:value="${laudoRequest?.emailPaciente}">
+                    <input type="hidden" name="telefonePaciente" th:value="${laudoRequest?.telefonePaciente}">
+                    <input type="hidden" name="convenio" th:value="${laudoRequest?.convenio}">
+
+                    <!-- Exibir dados do paciente selecionado -->
+                    <div id="dadosPaciente" class="mt-3 p-3 bg-light rounded" style="display: none;">
+                        <h6>Dados do Paciente Selecionado:</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Nome:</strong> <span id="displayNome"></span></p>
+                                <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Telefone:</strong> <span id="displayTelefone"></span></p>
+                                <p><strong>Convênio:</strong> <span id="displayConvenio"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="card mb-4">
                 <div class="card-body">
                     <h5 class="card-title mb-3">Informações Gerais do Exame</h5>
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="tipoExame" class="form-label">Tipo de Exame:</label>
-                            <select id="tipoExame" class="form-select" th:field="*{tipoExame}" onchange="toggleSections()">
+                            <select id="tipoExame" class="form-select" th:field="*{tipoExame}"
+                                onchange="toggleSections()">
                                 <option value="HEMOGRAMA_AGRUPADO">Hemograma Agrupado (via CSV)</option>
                                 <option value="GLICOSE">Glicose (Entrada Manual)</option>
                                 <option value="UREIA">Ureia (Entrada Manual)</option>
@@ -57,29 +101,53 @@
                 <div class="card-body">
                     <h5 class="card-title mb-3">Selecione os Exames do Hemograma</h5>
                     <div class="row">
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="HEMOGRAMA_COMPLETO" id="sub1" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub1">Hemograma Completo</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="GLICOSE" id="sub2" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub2">Glicemia</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="UREIA" id="sub3" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub3">Ureia</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="CREATININA" id="sub4" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub4">Creatinina</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="COLESTEROL_TOTAL" id="sub5" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub5">Colesterol Total</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="HDL" id="sub6" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub6">HDL</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="LDL" id="sub7" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub7">LDL</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="TRIGLICERIDEOS" id="sub8" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub8">Triglicerídeos</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="TGO_AST" id="sub9" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub9">TGO (AST)</label></div>
-                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox" value="TGP_ALT" id="sub10" th:field="*{subExamesSelecionados}"><label class="form-check-label" for="sub10">TGP (ALT)</label></div>
-                        </div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="HEMOGRAMA_COMPLETO" id="sub1" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub1">Hemograma Completo</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="GLICOSE" id="sub2" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub2">Glicemia</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="UREIA" id="sub3" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub3">Ureia</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="CREATININA" id="sub4" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub4">Creatinina</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="COLESTEROL_TOTAL" id="sub5" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub5">Colesterol Total</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="HDL" id="sub6" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub6">HDL</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="LDL" id="sub7" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub7">LDL</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="TRIGLICERIDEOS" id="sub8" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub8">Triglicerídeos</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="TGO_AST" id="sub9" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub9">TGO (AST)</label></div>
+                        <div class="col-md-4 form-check mb-2 ms-3"><input class="form-check-input" type="checkbox"
+                                value="TGP_ALT" id="sub10" th:field="*{subExamesSelecionados}"><label
+                                class="form-check-label" for="sub10">TGP (ALT)</label></div>
+                    </div>
                 </div>
             </div>
 
             <div class="card mb-4">
                 <div class="card-body">
-                    <h5 class="card-title mb-3">Dados do Paciente e Médico</h5>
+                    <h5 class="card-title mb-3">Dados do Médico</h5>
                     <div class="row">
-                        <div class="col-md-6 mb-3"><label for="pacienteNome" class="form-label">Nome do Paciente:</label><input type="text" id="pacienteNome" class="form-control" th:field="*{pacienteNome}"/></div>
-                        <div class="col-md-6 mb-3"><label for="convenio" class="form-label">Convênio:</label><input type="text" id="convenio" class="form-control" th:field="*{convenio}"/></div>
-                        <div class="col-md-6 mb-3"><label for="medicoSolicitante" class="form-label">Médico Solicitante:</label><input type="text" id="medicoSolicitante" class="form-control" th:field="*{medicoSolicitante}"/></div>
-                        <div class="col-md-6 mb-3"><label for="medicoResponsavel" class="form-label">Médico Responsável:</label><input type="text" id="medicoResponsavel" class="form-control" th:field="*{medicoResponsavel}"/></div>
-                        <div class="col-md-6 mb-3"><label for="crmResponsavel" class="form-label">CRM Responsável:</label><input type="text" id="crmResponsavel" class="form-control" th:field="*{crmResponsavel}"/></div>
+                        <div class="col-md-6 mb-3"><label for="medicoSolicitante" class="form-label">Médico
+                                Solicitante:</label><input type="text" id="medicoSolicitante" class="form-control"
+                                th:field="*{medicoSolicitante}" /></div>
+                        <div class="col-md-6 mb-3"><label for="medicoResponsavel" class="form-label">Médico
+                                Responsável:</label><input type="text" id="medicoResponsavel" class="form-control"
+                                th:field="*{medicoResponsavel}" /></div>
+                        <div class="col-md-6 mb-3"><label for="crmResponsavel" class="form-label">CRM
+                                Responsável:</label><input type="text" id="crmResponsavel" class="form-control"
+                                th:field="*{crmResponsavel}" /></div>
                     </div>
                 </div>
             </div>
@@ -88,16 +156,33 @@
                 <div class="card-body">
                     <h5 class="card-title mb-3">Contexto Clínico (para exames individuais)</h5>
                     <div class="row">
-                         <div class="col-md-4 mb-3"><label class="form-label">Valor (ex: glicose):</label><input type="number" step="any" class="form-control" th:field="*{contexto.valor}"/></div>
-                         <div class="col-md-4 mb-3"><label class="form-label">Unidade:</label><input type="text" class="form-control" th:field="*{contexto.unidade}"/></div>
-                         <div class="col-md-4 mb-3"><label class="form-label">Idade:</label><input type="number" class="form-control" th:field="*{contexto.idade}"/></div>
-                         <div class="col-md-4 mb-3"><label class="form-label">Sexo:</label><input type="text" class="form-control" th:field="*{contexto.sexo}"/></div>
-                         <div class="col-md-8 mb-3"><label class="form-label">Protocolo (RM):</label><input type="text" class="form-control" th:field="*{contexto.protocolo}"/></div>
-                         <div class="col-md-6 mb-3"><label class="form-label">Radiologista (assinatura):</label><input type="text" class="form-control" th:field="*{contexto.radiologistaAssinatura}"/></div>
-                         <div class="col-md-6 mb-3"><label class="form-label">Contraste Utilizado:</label><input type="text" class="form-control" th:field="*{contexto.contraste}"/></div>
-                         <div class="col-md-4 mb-3"><label class="form-label">Dose do Contraste:</label><input type="text" class="form-control" th:field="*{contexto.doseContraste}"/></div>
-                         <div class="col-md-4 d-flex align-items-center mt-3"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="implantes" th:field="*{contexto.pacienteComImplantesMetalicos}"><label class="form-check-label" for="implantes">Paciente com implantes?</label></div></div>
-                         <div class="col-md-4 d-flex align-items-center mt-3"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" role="switch" id="contraste" th:field="*{contexto.usouContraste}"><label class="form-check-label" for="contraste">Usou contraste?</label></div></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Valor (ex: glicose):</label><input
+                                type="number" step="any" class="form-control" th:field="*{contexto.valor}" /></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Unidade:</label><input type="text"
+                                class="form-control" th:field="*{contexto.unidade}" /></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Idade:</label><input type="number"
+                                class="form-control" th:field="*{contexto.idade}" /></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Sexo:</label><input type="text"
+                                class="form-control" th:field="*{contexto.sexo}" /></div>
+                        <div class="col-md-8 mb-3"><label class="form-label">Protocolo (RM):</label><input type="text"
+                                class="form-control" th:field="*{contexto.protocolo}" /></div>
+                        <div class="col-md-6 mb-3"><label class="form-label">Radiologista (assinatura):</label><input
+                                type="text" class="form-control" th:field="*{contexto.radiologistaAssinatura}" /></div>
+                        <div class="col-md-6 mb-3"><label class="form-label">Contraste Utilizado:</label><input
+                                type="text" class="form-control" th:field="*{contexto.contraste}" /></div>
+                        <div class="col-md-4 mb-3"><label class="form-label">Dose do Contraste:</label><input
+                                type="text" class="form-control" th:field="*{contexto.doseContraste}" /></div>
+                        <div class="col-md-4 d-flex align-items-center mt-3">
+                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox"
+                                    role="switch" id="implantes"
+                                    th:field="*{contexto.pacienteComImplantesMetalicos}"><label class="form-check-label"
+                                    for="implantes">Paciente com implantes?</label></div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-center mt-3">
+                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox"
+                                    role="switch" id="contraste" th:field="*{contexto.usouContraste}"><label
+                                    class="form-check-label" for="contraste">Usou contraste?</label></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -106,7 +191,7 @@
                 <p th:if="${erro}" th:text="${erro}" class="text-danger text-start"></p>
                 <button type="submit" class="btn btn-primary btn-lg px-5">Gerar Laudo</button>
             </div>
-            
+
         </form>
     </div>
 
@@ -124,8 +209,72 @@
                 contextoDiv.style.display = 'block'; // Mostra campos de contexto
             }
         }
-        // Executa a função assim que a página carregar para garantir o estado inicial correto
-        document.addEventListener('DOMContentLoaded', toggleSections);
+
+        // Script para preenchimento automático dos dados do paciente
+        document.getElementById('pacienteId').addEventListener('change', function () {
+            const pacienteId = this.value;
+            const dadosPacienteDiv = document.getElementById('dadosPaciente');
+
+            if (pacienteId) {
+                // Buscar dados do paciente via AJAX
+                fetch('/pacientes/dados/' + pacienteId)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Paciente não encontrado');
+                        }
+                        return response.json();
+                    })
+                    .then(paciente => {
+                        // Preencher campos hidden
+                        document.querySelector('input[name="pacienteNome"]').value = paciente.nome || '';
+                        document.querySelector('input[name="emailPaciente"]').value = paciente.email || '';
+                        document.querySelector('input[name="telefonePaciente"]').value = paciente.telefone || '';
+                        document.querySelector('input[name="convenio"]').value = paciente.convenio || '';
+
+                        // Atualizar exibição visual
+                        document.getElementById('displayNome').textContent = paciente.nome || 'Não informado';
+                        document.getElementById('displayEmail').textContent = paciente.email || 'Não informado';
+                        document.getElementById('displayTelefone').textContent = paciente.telefone || 'Não informado';
+                        document.getElementById('displayConvenio').textContent = paciente.convenio || 'Não informado';
+
+                        // Mostrar div de dados
+                        dadosPacienteDiv.style.display = 'block';
+
+                        console.log('Paciente selecionado:', paciente.nome);
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar paciente:', error);
+                        dadosPacienteDiv.style.display = 'none';
+                        alert('Erro ao carregar dados do paciente: ' + error.message);
+                    });
+            } else {
+                // Limpar campos se nenhum paciente selecionado
+                document.querySelector('input[name="pacienteNome"]').value = '';
+                document.querySelector('input[name="emailPaciente"]').value = '';
+                document.querySelector('input[name="telefonePaciente"]').value = '';
+                document.querySelector('input[name="convenio"]').value = '';
+
+                // Esconder div de dados
+                dadosPacienteDiv.style.display = 'none';
+            }
+        });
+
+        // Preencher dados iniciais se já existirem
+        document.addEventListener('DOMContentLoaded', function () {
+            // Executa a função para garantir o estado inicial correto
+            toggleSections();
+
+            const pacienteId = document.getElementById('pacienteId').value;
+            const pacienteNome = document.querySelector('input[name="pacienteNome"]').value;
+
+            if (pacienteId && pacienteNome) {
+                // Simular change event para preencher dados visuais
+                document.getElementById('pacienteId').dispatchEvent(new Event('change'));
+            }
+        });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

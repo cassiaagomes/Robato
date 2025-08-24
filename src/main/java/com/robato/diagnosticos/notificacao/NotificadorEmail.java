@@ -3,6 +3,9 @@ package com.robato.diagnosticos.notificacao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class NotificadorEmail implements ObservadorNotificacao {
     private List<String> historico = new ArrayList<>();
     
