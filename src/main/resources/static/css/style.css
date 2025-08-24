@@ -478,7 +478,8 @@ body.laudo-page {
 /* Melhorias na tabela */
 .table {
     border-collapse: separate;
-    border-spacing: 0 8px; /* Adiciona espaçamento vertical entre as linhas */
+    border-spacing: 0 8px;
+    /* Adiciona espaçamento vertical entre as linhas */
 }
 
 .table thead th {
@@ -495,7 +496,7 @@ body.laudo-page {
 
 .table tbody tr {
     background-color: var(--cor-branco);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
@@ -514,6 +515,7 @@ body.laudo-page {
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
+
 .table tbody tr td:last-child {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -555,4 +557,188 @@ body.laudo-page {
 .modal-footer {
     background-color: var(--cor-fundo);
     border-top: 1px solid #dee2e6;
+}
+
+/* =================================================================== */
+/* --- ESTILOS PARA PÁGINAS DE PAGAMENTO E NOTA FISCAL (COMPLEMENTO) --- */
+/* =================================================================== */
+
+/* --- Estilos para a Página de Seleção de Pagamento --- */
+
+/* Card de Resumo do Pedido */
+.resumo-pedido-card .card-body p {
+    font-size: 1.1em;
+    margin-bottom: 0.8rem;
+}
+
+.resumo-pedido-card .card-body p strong {
+    color: var(--cor-texto-escuro);
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+/* Card de Métodos de Pagamento */
+.metodos-pagamento-card .card-header h5 {
+    color: var(--cor-primaria);
+    font-weight: 600;
+}
+
+/* Opções de pagamento customizadas com ícones */
+.payment-options .form-check {
+    padding: 15px 20px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    margin-bottom: 10px !important;
+    /* !important para sobrepor o mb-2 do bootstrap */
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.payment-options .form-check:hover {
+    background-color: #f8f9fa;
+    border-color: var(--cor-destaque);
+}
+
+.payment-options .form-check-input {
+    display: none;
+    /* Esconde o radio button original */
+}
+
+.payment-options .form-check-label {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.payment-options .form-check-label i {
+    font-size: 1.5em;
+    width: 40px;
+    /* Largura fixa para o ícone */
+    text-align: center;
+    margin-right: 15px;
+    color: var(--cor-destaque);
+}
+
+/* Estilo para a opção selecionada */
+.payment-options .form-check-input:checked+.form-check-label {
+    font-weight: 600;
+    color: var(--cor-primaria);
+}
+
+.payment-options .form-check-input:checked+.form-check-label i {
+    color: var(--cor-primaria);
+}
+
+.payment-options .form-check-input:checked~.form-check {
+    /* Não funciona assim, precisa ser no pai */
+}
+
+/* Uma forma de fazer o highlight no container é com JS, mas podemos fazer com CSS assim: */
+.payment-options .form-check-input:checked,
+.payment-options .form-check-input:checked:hover {
+    /* Como o input está escondido, a melhor forma é aplicar o estilo ao form-check quando o input dentro dele está checked. */
+    /* Infelizmente, CSS não tem um seletor de "pai". Uma alternativa é usar JS ou manter o hover como feedback principal. */
+    /* Vamos adicionar um destaque no label que é mais simples */
+}
+
+
+/* --- Estilos para a Página da Nota Fiscal --- */
+
+.nota-fiscal-card .card-header.bg-success {
+    background-color: #198754 !important;
+    /* Cor mais sóbria que o 'success' padrão */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nota-fiscal-card .card-header h3 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.nota-fiscal-card .card-header::before {
+    content: '\f560';
+    /* Ícone de check-circle do Font Awesome */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 1.8em;
+}
+
+.info-section h5 {
+    color: var(--cor-primaria);
+    font-weight: 600;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.info-section p {
+    margin-bottom: 0.6rem;
+    font-size: 0.95em;
+}
+
+.info-section p strong {
+    color: #6c757d;
+    display: inline-block;
+    width: 90px;
+    /* Alinha os valores */
+}
+
+.nota-fiscal-card table thead th {
+    background-color: var(--cor-fundo);
+}
+
+.nota-fiscal-card table tfoot th {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.nota-fiscal-card table tfoot tr {
+    background-color: #f8f9fa;
+    border-top: 2px solid #dee2e6;
+}
+
+.nota-fiscal-actions .btn i {
+    margin-right: 8px;
+}
+
+
+/* --- Estilos para IMPRESSÃO da Nota Fiscal --- */
+@media print {
+    body {
+        background-color: var(--cor-branco) !important;
+        height: auto;
+        overflow: visible;
+    }
+
+    .sidebar,
+    .nota-fiscal-actions .btn-success {
+        display: none !important;
+        /* Esconde a sidebar e o botão "Novo Pagamento" */
+    }
+
+    .content {
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto;
+        box-shadow: none !important;
+        border-radius: 0;
+    }
+
+    .container {
+        max-width: 100% !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+
+    .nota-fiscal-actions .btn-primary {
+        display: none;
+        /* Esconde o botão de imprimir na impressão */
+    }
 }

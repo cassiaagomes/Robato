@@ -74,7 +74,7 @@ public class ExameViewController {
             model.addAttribute("laudoRequest", new LaudoRequest());
         }
         model.addAttribute("tipos", TipoExame.values());
-        List<Paciente> pacientes = pacienteService.listarTodos();
+        List<Paciente> pacientes = pacienteService.listarPacientes();
         model.addAttribute("pacientes", pacientes);
 
         model.addAttribute("currentUri", request.getRequestURI());
