@@ -5,6 +5,7 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\DescontoOutubroRosa.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Medico.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Paciente.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Pagamento.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Creatinina.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\ExameBase.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\ExameComponent.java
@@ -47,6 +48,7 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\FilaService.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\MedicoService.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\PacienteService.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\service\PagamentoService.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorBase.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorCreatinina.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\validacao\ValidadorExame.java

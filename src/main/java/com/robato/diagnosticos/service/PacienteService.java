@@ -1,11 +1,10 @@
 package com.robato.diagnosticos.service;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,8 @@ public class PacienteService {
     private final Map<Long, Paciente> pacientes = new LinkedHashMap<>();
     private final AtomicLong contador = new AtomicLong(1);
 
-    public Collection<Paciente> listarPacientes() {
-        return pacientes.values();
+    public List<Paciente> listarPacientes() {
+        return new ArrayList<>(pacientes.values()); 
     }
 
     public Paciente adicionarPaciente(Paciente paciente) {
@@ -28,14 +27,18 @@ public class PacienteService {
         return paciente;
     }
 
-    public List<Paciente> listarTodos() {
+
+    public Paciente buscarPorNome(String nome) {
         return pacientes.values().stream()
-                .collect(Collectors.toList());
+                .filter(paciente -> paciente.getNome().equalsIgnoreCase(nome))
+                .findFirst()
+                .orElse(null);
     }
+
 
     public Paciente buscarPorId(Long id) {
         return pacientes.get(id);
-    }   
+    }
 
     public Paciente atualizarPaciente(Paciente pacienteAtualizado) {
         if (pacienteAtualizado.getId() == null || !pacientes.containsKey(pacienteAtualizado.getId())) {
@@ -47,5 +50,9 @@ public class PacienteService {
 
     public Paciente excluirPaciente(Long id) {
         return pacientes.remove(id);
+    }
+
+    public boolean existePaciente(Long id) {
+        return pacientes.containsKey(id);
     }
 }
