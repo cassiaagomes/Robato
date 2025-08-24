@@ -112,12 +112,9 @@ public class ExameViewController {
             return "redirect:/exames/importar-pagina";
         }
         try {
-            // Usar o método parseResultadosCsv em vez de parseCsvParaLaudoRequest
             List<ResultadoExameItem> resultadosDoCsv = facade.parseResultadosCsv(file.getInputStream());
 
             System.out.println(">>> CSV parseado com " + resultadosDoCsv.size() + " resultados");
-
-            // Salvar os resultados na sessão
             session.setAttribute("resultadosDoCsv", resultadosDoCsv);
 
             redirectAttributes.addFlashAttribute("sucesso",
@@ -148,38 +145,31 @@ public class ExameViewController {
                 }
             }
 
-            // Recuperar resultados do CSV da sessão
             @SuppressWarnings("unchecked")
             List<ResultadoExameItem> resultadosSalvos = (List<ResultadoExameItem>) session
                     .getAttribute("resultadosDoCsv");
 
-            // Se não há resultados na sessão, verificar se há no request
             if (resultadosSalvos == null && req.getContexto() != null && req.getContexto().getResultados() != null) {
                 resultadosSalvos = req.getContexto().getResultados();
             }
 
-            // Garantir que o contexto existe
             if (req.getContexto() == null) {
                 req.setContexto(new ValidacaoContexto());
             }
 
-            // Se temos resultados, colocá-los no contexto
             if (resultadosSalvos != null && !resultadosSalvos.isEmpty()) {
                 req.getContexto().setResultados(resultadosSalvos);
                 System.out.println(">>> Resultados a serem processados: " + resultadosSalvos.size());
             }
 
-            // Processar imagem se fornecida e for exame de imagem
             if (imagemFile != null && !imagemFile.isEmpty() &&
                     (req.getTipoExame().equals("RAIO_X") || req.getTipoExame().equals("RESSONANCIA"))) {
 
-                // Verificar se é uma imagem válida
                 if (imagemFile.getContentType() != null &&
                         (imagemFile.getContentType().startsWith("image/") ||
                                 imagemFile.getContentType().equals("application/pdf") ||
                                 imagemFile.getContentType().equals("application/dicom"))) {
 
-                    // Converter imagem para Base64
                     String imagemBase64 = Base64.getEncoder().encodeToString(imagemFile.getBytes());
                     req.getContexto().setImagemBase64(imagemBase64);
 
@@ -190,7 +180,6 @@ public class ExameViewController {
                 }
             }
 
-            // Debug: verificar o que está no request
             System.out.println(">>> TipoExame: " + req.getTipoExame());
             System.out.println(">>> Paciente: " + req.getPacienteNome());
             System.out.println(">>> Email: " + req.getEmailPaciente());
@@ -199,18 +188,14 @@ public class ExameViewController {
                     (req.getContexto().getResultados() != null ? req.getContexto().getResultados().size() : 0));
             System.out.println(">>> Possui imagem: " + (req.getContexto().getImagemBase64() != null));
 
-            // AGORA USA O MÉTODO gerarLaudo QUE FAZ A NOTIFICAÇÃO AUTOMATICAMENTE
             String laudoFormatado = facade.gerarLaudo(req);
 
-            // Gera também o objeto do laudo para exibição
             LaudoCompleto laudoObjeto = facade.construirLaudo(req);
 
-            // Se há imagem, adiciona ao objeto do laudo
             if (req.getContexto().getImagemBase64() != null) {
                 laudoObjeto.setImagemBase64(req.getContexto().getImagemBase64());
             }
 
-            // Debug: verificar o que foi construído
             System.out.println(">>> Resultados no laudoObjeto: " +
                     (laudoObjeto.getResultados() != null ? laudoObjeto.getResultados().size() : 0));
             System.out.println(">>> Possui imagem no laudo: " + (laudoObjeto.getImagemBase64() != null));
@@ -220,26 +205,22 @@ public class ExameViewController {
             System.out.println("Email: " + req.getEmailPaciente());
             System.out.println("Telefone: " + req.getTelefonePaciente());
 
-            model.addAttribute("laudo", laudoObjeto); // ← Objeto LaudoCompleto
-            model.addAttribute("laudoFormatado", laudoFormatado); // conteúdo formatado
+            model.addAttribute("laudo", laudoObjeto); 
+            model.addAttribute("laudoFormatado", laudoFormatado);
             model.addAttribute("tipoExame", req.getTipoExame());
 
-            // Mantém os atributos individuais para compatibilidade com o template
             model.addAttribute("pacienteNome", laudoObjeto.getPaciente());
             model.addAttribute("convenio", laudoObjeto.getConvenio());
             model.addAttribute("medicoSolicitante", laudoObjeto.getMedicoSolicitante());
             model.addAttribute("medicoResponsavel", laudoObjeto.getMedicoResponsavel());
             model.addAttribute("crmResponsavel", laudoObjeto.getCrmResponsavel());
 
-            // Para exibir informações de notificação na página
             model.addAttribute("emailPaciente", req.getEmailPaciente());
             model.addAttribute("telefonePaciente", req.getTelefonePaciente());
 
-            // Remove resultados temporários da sessão
             session.removeAttribute("resultadosDoCsv");
             model.addAttribute("currentUri", request.getRequestURI());
 
-            // Enviar notificações
             notificadorEmail.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
                     req.getEmailPaciente());
             notificadorWhatsapp.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
@@ -247,7 +228,7 @@ public class ExameViewController {
 
             return "laudo";
         } catch (Exception e) {
-            e.printStackTrace(); // Para ver o stack trace completo
+            e.printStackTrace();
             model.addAttribute("erro", "Erro ao gerar laudo: " + e.getMessage());
             model.addAttribute("laudoRequest", req);
             model.addAttribute("tipos", TipoExame.values());
