@@ -4,7 +4,6 @@ import java.util.List; // Import necessário para a lista
 
 public class ValidacaoContexto {
 
-    // --- Atributos existentes ---
     private Boolean pacienteComImplantesMetalicos;
     private Double valor;
     private String unidade;
@@ -18,12 +17,8 @@ public class ValidacaoContexto {
     private String doseContraste;
     private String resultadoFormatado;
     private String diagnostico;
-
-    // --- Novo atributo para a lista de resultados (ex: hemograma) ---
+    private String imagemBase64;
     private List<ResultadoExameItem> resultados;
-
-
-    // --- Getters e Setters ---
 
     public Boolean getPacienteComImplantesMetalicos() {
         return pacienteComImplantesMetalicos;
@@ -122,5 +117,13 @@ public class ValidacaoContexto {
 
     public void setResultados(List<ResultadoExameItem> resultados) {
         this.resultados = resultados;
+    }
+
+    public String getImagemBase64() {
+        return imagemBase64;
+    }
+
+    public void setImagemBase64(String imagemBase64) {
+        this.imagemBase64 = imagemBase64;
     }
 }

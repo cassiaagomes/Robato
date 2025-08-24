@@ -1,5 +1,6 @@
 package com.robato.diagnosticos.web;
 
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -129,8 +130,9 @@ public class ExameViewController {
     }
 
     @PostMapping("/exames/gerar")
-    public String gerarLaudo(@ModelAttribute LaudoRequest req, Model model, HttpSession session,
-            HttpServletRequest request) {
+    public String gerarLaudo(@ModelAttribute LaudoRequest req,
+            @RequestParam(value = "imagemExame", required = false) MultipartFile imagemFile,
+            Model model, HttpSession session, HttpServletRequest request) {
         try {
             if (req.getPacienteId() != null) {
                 Paciente paciente = pacienteService.buscarPorId(req.getPacienteId());
@@ -167,6 +169,27 @@ public class ExameViewController {
                 System.out.println(">>> Resultados a serem processados: " + resultadosSalvos.size());
             }
 
+            // Processar imagem se fornecida e for exame de imagem
+            if (imagemFile != null && !imagemFile.isEmpty() &&
+                    (req.getTipoExame().equals("RAIO_X") || req.getTipoExame().equals("RESSONANCIA"))) {
+
+                // Verificar se é uma imagem válida
+                if (imagemFile.getContentType() != null &&
+                        (imagemFile.getContentType().startsWith("image/") ||
+                                imagemFile.getContentType().equals("application/pdf") ||
+                                imagemFile.getContentType().equals("application/dicom"))) {
+
+                    // Converter imagem para Base64
+                    String imagemBase64 = Base64.getEncoder().encodeToString(imagemFile.getBytes());
+                    req.getContexto().setImagemBase64(imagemBase64);
+
+                    System.out.println(">>> Imagem recebida: " + imagemFile.getOriginalFilename() +
+                            " (" + imagemFile.getSize() + " bytes, tipo: " + imagemFile.getContentType() + ")");
+                } else {
+                    System.out.println(">>> Arquivo não é uma imagem válida: " + imagemFile.getContentType());
+                }
+            }
+
             // Debug: verificar o que está no request
             System.out.println(">>> TipoExame: " + req.getTipoExame());
             System.out.println(">>> Paciente: " + req.getPacienteNome());
@@ -174,6 +197,7 @@ public class ExameViewController {
             System.out.println(">>> Telefone: " + req.getTelefonePaciente());
             System.out.println(">>> Resultados no contexto: " +
                     (req.getContexto().getResultados() != null ? req.getContexto().getResultados().size() : 0));
+            System.out.println(">>> Possui imagem: " + (req.getContexto().getImagemBase64() != null));
 
             // AGORA USA O MÉTODO gerarLaudo QUE FAZ A NOTIFICAÇÃO AUTOMATICAMENTE
             String laudoFormatado = facade.gerarLaudo(req);
@@ -181,9 +205,15 @@ public class ExameViewController {
             // Gera também o objeto do laudo para exibição
             LaudoCompleto laudoObjeto = facade.construirLaudo(req);
 
+            // Se há imagem, adiciona ao objeto do laudo
+            if (req.getContexto().getImagemBase64() != null) {
+                laudoObjeto.setImagemBase64(req.getContexto().getImagemBase64());
+            }
+
             // Debug: verificar o que foi construído
             System.out.println(">>> Resultados no laudoObjeto: " +
                     (laudoObjeto.getResultados() != null ? laudoObjeto.getResultados().size() : 0));
+            System.out.println(">>> Possui imagem no laudo: " + (laudoObjeto.getImagemBase64() != null));
 
             System.out.println("=== NOTIFICAÇÃO ENVIADA ===");
             System.out.println("Paciente: " + req.getPacienteNome());
@@ -209,10 +239,7 @@ public class ExameViewController {
             session.removeAttribute("resultadosDoCsv");
             model.addAttribute("currentUri", request.getRequestURI());
 
-            String emailMsg = "Laudo gerado para: " + req.getPacienteNome() + " - Email: " + req.getEmailPaciente();
-            String whatsappMsg = "Laudo gerado para: " + req.getPacienteNome() + " - WhatsApp: "
-                    + req.getTelefonePaciente();
-
+            // Enviar notificações
             notificadorEmail.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
                     req.getEmailPaciente());
             notificadorWhatsapp.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
