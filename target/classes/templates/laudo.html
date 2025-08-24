@@ -83,6 +83,15 @@
                 </tbody>
             </table>
 
+            <div th:if="${laudo.imagemBase64 != null}" class="mt-4">
+                <h5>Imagem do Exame:</h5>
+                <div class="text-center">
+                    <img th:src="'data:image/jpeg;base64,' + ${laudo.imagemBase64}" class="img-fluid rounded shadow"
+                        style="max-height: 400px;" alt="Imagem do exame" />
+                    <p class="text-muted mt-2">Imagem referente ao exame realizado</p>
+                </div>
+            </div>
+
             <div th:if="${laudo.observacoes}" class="mt-4">
                 <h5>Observações:</h5>
                 <p th:text="${laudo.observacoes}"></p>

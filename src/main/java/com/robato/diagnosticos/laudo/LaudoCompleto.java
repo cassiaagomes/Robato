@@ -14,30 +14,73 @@ public class LaudoCompleto {
     private String medicoResponsavel;
     private String crmResponsavel;
     private LocalDate data;
-    private List<ResultadoExameItem> resultados; 
-    private String observacoes; 
+    private List<ResultadoExameItem> resultados;
+    private String observacoes;
+    private String imagemBase64;
 
+    public int getNumeroExame() {
+        return numeroExame;
+    }
 
-    public int getNumeroExame() { return numeroExame; }
-    public void setNumeroExame(int numeroExame) { this.numeroExame = numeroExame; }
+    public void setNumeroExame(int numeroExame) {
+        this.numeroExame = numeroExame;
+    }
 
-    public String getPaciente() { return paciente; }
-    public void setPaciente(String paciente) { this.paciente = paciente; }
+    public String getPaciente() {
+        return paciente;
+    }
 
-    public String getConvenio() { return convenio; }
-    public void setConvenio(String convenio) { this.convenio = convenio; }
+    public void setPaciente(String paciente) {
+        this.paciente = paciente;
+    }
 
-    public String getMedicoSolicitante() { return medicoSolicitante; }
-    public void setMedicoSolicitante(String medicoSolicitante) { this.medicoSolicitante = medicoSolicitante; }
+    public String getConvenio() {
+        return convenio;
+    }
 
-    public String getMedicoResponsavel() { return medicoResponsavel; }
-    public void setMedicoResponsavel(String medicoResponsavel) { this.medicoResponsavel = medicoResponsavel; }
+    public void setConvenio(String convenio) {
+        this.convenio = convenio;
+    }
 
-    public String getCrmResponsavel() { return crmResponsavel; }
-    public void setCrmResponsavel(String crmResponsavel) { this.crmResponsavel = crmResponsavel; }
+    public String getMedicoSolicitante() {
+        return medicoSolicitante;
+    }
 
-    public LocalDate getData() { return data; }
-    public void setData(LocalDate data) { this.data = data; }
+    public void setMedicoSolicitante(String medicoSolicitante) {
+        this.medicoSolicitante = medicoSolicitante;
+    }
+
+    public String getMedicoResponsavel() {
+        return medicoResponsavel;
+    }
+
+    public void setMedicoResponsavel(String medicoResponsavel) {
+        this.medicoResponsavel = medicoResponsavel;
+    }
+
+    public String getCrmResponsavel() {
+        return crmResponsavel;
+    }
+
+    public void setCrmResponsavel(String crmResponsavel) {
+        this.crmResponsavel = crmResponsavel;
+    }
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
+
+    public String getImagemBase64() {
+        return imagemBase64;
+    }
+
+    public void setImagemBase64(String imagemBase64) {
+        this.imagemBase64 = imagemBase64;
+    }
 
     public List<ResultadoExameItem> getResultados() {
         return resultados;

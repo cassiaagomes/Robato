@@ -84,7 +84,7 @@ public class SistemaDiagnosticoFacade {
         String formato = req.getFormato() != null ? req.getFormato() : "texto";
         String laudoFormatado = formatarLaudo(laudoCompleto, formato);
 
-        notificarPacienteLaudoPronto(laudoCompleto, req); 
+        notificarPacienteLaudoPronto(laudoCompleto, req);
 
         return laudoFormatado;
     }
@@ -108,7 +108,6 @@ public class SistemaDiagnosticoFacade {
                         ExameComponent subExame = ExameFactory.criar(tipoSubExame);
                         exameComposto.adicionar(subExame);
                     } catch (IllegalArgumentException e) {
-                        // subexame inválido é simplesmente ignorado
                     }
                 }
             }
@@ -133,7 +132,7 @@ public class SistemaDiagnosticoFacade {
             resultadosFiltrados.addAll(todosOsResultados);
         }
 
-        return new LaudoBuilder()
+        LaudoCompleto laudo = new LaudoBuilder()
                 .numero(numero)
                 .paciente(req.getPacienteNome(), req.getConvenio())
                 .medico(req.getMedicoSolicitante(), req.getMedicoResponsavel(), req.getCrmResponsavel())
@@ -141,6 +140,13 @@ public class SistemaDiagnosticoFacade {
                 .observacoes(diagnostico)
                 .data(LocalDate.now())
                 .build();
+
+        // DEPOIS adicionar a imagem se existir
+        if (ctx.getImagemBase64() != null) {
+            laudo.setImagemBase64(ctx.getImagemBase64());
+        }
+
+        return laudo;
     }
 
     private void notificarPacienteLaudoPronto(LaudoCompleto laudo, LaudoRequest req) {
