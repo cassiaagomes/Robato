@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.robato.diagnosticos.domain.Paciente;
 import com.robato.diagnosticos.service.PacienteService;
@@ -27,9 +29,11 @@ public class PacienteViewController {
     public String salvarPaciente(@RequestParam String nome,
             @RequestParam String email,
             @RequestParam String telefone,
-            @RequestParam String convenio) {
+            @RequestParam String convenio,
+            RedirectAttributes redirectAttributes) {
         Paciente novoPaciente = new Paciente(null, nome, email, telefone, convenio, "ATIVO");
         pacienteService.adicionarPaciente(novoPaciente);
+        redirectAttributes.addAttribute("adicionado", true);
         return "redirect:/pacientes";
     }
 
@@ -58,7 +62,8 @@ public class PacienteViewController {
             @RequestParam String nome,
             @RequestParam(required = false) String email,
             @RequestParam(required = false) String telefone,
-            @RequestParam(required = false) String convenio) {
+            @RequestParam(required = false) String convenio,
+            RedirectAttributes redirectAttributes) {
         Paciente paciente = pacienteService.buscarPorId(id);
         if (paciente != null) {
             paciente.setNome(nome);
@@ -66,14 +71,28 @@ public class PacienteViewController {
             paciente.setTelefone(telefone);
             paciente.setConvenio(convenio);
             pacienteService.atualizarPaciente(paciente);
+            redirectAttributes.addAttribute("atualizado", true);
         }
         return "redirect:/pacientes";
     }
 
     @PostMapping("/pacientes/excluir/{id}")
-    public String excluirPaciente(@PathVariable Long id) {
+    public String excluirPaciente(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         pacienteService.excluirPaciente(id);
+        redirectAttributes.addAttribute("excluido", true);
         return "redirect:/pacientes";
     }
 
+    // Método para importar CSV (NOVO)
+    @PostMapping("/pacientes/importar-csv")
+    public String importarCsv(@RequestParam("arquivo") MultipartFile arquivo,
+            RedirectAttributes redirectAttributes) {
+        try {
+            pacienteService.importarCsv(arquivo);
+            redirectAttributes.addAttribute("importado", true);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro", "Erro ao importar: " + e.getMessage());
+        }
+        return "redirect:/pacientes";
+    }
 }
