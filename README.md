@@ -2,8 +2,8 @@
 
 ## Equipe
 
-- Cássia dos Santos de A Gomes
-- Pedro Henrique Barbosa
+- Cássia dos Santos de A Gomes  
+- Pedro Henrique Barbosa  
 
 ---
 
@@ -17,12 +17,11 @@ O sistema foi projetado para ser **flexível, reutilizável e de fácil manuten�
 
 ## Padrões de Projeto Aplicados
 
-
 ### R2: Estruturação e Composição de Exames (incluindo subexames)
 
-**Padrão Aplicado:** Composite
+**Padrão Aplicado:** Composite  
 
-**Aplicação:**
+**Aplicação:**  
 Permite tratar exames individuais (folhas) e agrupamentos de exames (compósitos, como o Hemograma Agrupado) de forma uniforme. Um Hemograma pode ser composto por múltiplos subexames (Hemograma Completo, Glicemia, Sorologia), formando uma estrutura de árvore.
 
 **Estrutura:**
@@ -31,39 +30,40 @@ Permite tratar exames individuais (folhas) e agrupamentos de exames (compósitos
 - **Classes Concretas (Folhas):** `HemogramaCompleto`, `Glicemia`, `Sorologia`, `RaioX`, `RessonanciaMagnetica`.
 - **Classe `HemogramaAgrupado` (Composto):** Contém outros `ExameComponents` e delega operações de cálculo e descrição.
 
-**Justificativa:** Proporciona uma hierarquia flexível de exames, permitindo manipular exames simples e complexos de forma consistente.
+**Justificativa:**  
+Proporciona uma hierarquia flexível de exames, permitindo manipular exames simples e complexos de forma consistente.
 
 ---
 
 ### Criação Flexível de Exames
 
-**Padrão Aplicado:** Factory (ou Simple Factory / Factory Method simplificado)
+**Padrão Aplicado:** Factory (ou Simple Factory / Factory Method simplificado)  
 
-**Aplicação:**
+**Aplicação:**  
 Criação de instâncias dos diversos tipos de exames de forma centralizada e desacoplada do cliente.
 
 **Estrutura:**
 - **Classe `ExameFactory`:** Possui o método `criarExame()` que retorna a instância correta de `ExameComponent`.
 
-**Justificativa:** Facilita a adição de novos tipos de exames e simplifica a lógica de criação.
+**Justificativa:**  
+Facilita a adição de novos tipos de exames e simplifica a lógica de criação.
 
 ---
 
 ### R3, R4: Geração de Laudos em Múltiplos Formatos (Texto, HTML, PDF)
 
-**Padrão Aplicado:** Bridge
+**Padrão Aplicado:** Bridge  
 
-**Aplicação:**
+**Aplicação:**  
 Separa a abstração do Laudo de sua implementação de formatação.
-
 
 ---
 
 ### R5: Aplicação de Regras de Validação Extensíveis
 
-**Padrão Aplicado:** Chain of Responsibility
+**Padrão Aplicado:** Chain of Responsibility  
 
-**Aplicação:**
+**Aplicação:**  
 Criação de cadeia de validadores para aplicar regras específicas aos exames.
 
 **Estrutura:**
@@ -71,15 +71,16 @@ Criação de cadeia de validadores para aplicar regras específicas aos exames.
 - **Classe Abstrata `ValidadorBase`:** Encadeamento de validadores.
 - **Validadores Concretos:** `ValidadorHemogramaResultados`, `ValidadorImplantesMetalicos`, `ValidadorExameAgrupado`.
 
-**Justificativa:** Desacopla a lógica de validação, permitindo extensão e reordenação de regras.
+**Justificativa:**  
+Desacopla a lógica de validação, permitindo extensão e reordenação de regras.
 
 ---
 
 ### R6: Notificação de Pacientes Quando o Laudo Estiver Pronto
 
-**Padrão Aplicado:** Observer
+**Padrão Aplicado:** Observer  
 
-**Aplicação:**
+**Aplicação:**  
 Notificar pacientes automaticamente por canais específicos ao concluir o laudo.
 
 **Estrutura:**
@@ -88,15 +89,16 @@ Notificar pacientes automaticamente por canais específicos ao concluir o laudo.
 - **`NotificadorWhatsapp`:** Implementação concreta para WhatsApp.
 - **`FachadaNotificacaoComunicacao`:** Facilita a integração de notificações.
 
-**Justificativa:** Permite adicionar ou remover canais de notificação sem acoplar ao sistema principal.
+**Justificativa:**  
+Permite adicionar ou remover canais de notificação sem acoplar ao sistema principal.
 
 ---
 
 ### R7: Aplicação de Políticas de Desconto Dinâmicas
 
-**Padrão Aplicado:** Decorator
+**Padrão Aplicado:** Decorator  
 
-**Aplicação:**
+**Aplicação:**  
 Permite a aplicação de múltiplos descontos acumuláveis aos preços dos exames.
 
 **Estrutura:**
@@ -104,15 +106,16 @@ Permite a aplicação de múltiplos descontos acumuláveis aos preços dos exame
 - **`PrecoBaseDesconto`:** Componente a ser decorado.
 - **Decoradores Concretos:** `DescontoConvenio`, `DescontoIdoso`, `DescontoOutubroRosa`.
 
-**Justificativa:** Oferece flexibilidade para combinar descontos de forma transparente.
+**Justificativa:**  
+Oferece flexibilidade para combinar descontos de forma transparente.
 
 ---
 
 ### R8: Gerenciamento da Prioridade dos Exames e Fila de Processamento
 
-**Padrão Aplicado:** Strategy
+**Padrão Aplicado:** Strategy  
 
-**Aplicação:**
+**Aplicação:**  
 Gerencia a ordenação de exames em fila com base em prioridades.
 
 **Estrutura:**
@@ -120,19 +123,20 @@ Gerencia a ordenação de exames em fila com base em prioridades.
 - **Interface `EstrategiaPrioridade`:** Define `determinarPrioridade(ExameComponent)`.
 - **Estratégias Concretas:** `EstrategiaPrioridadeUrgente`, `EstrategiaPrioridadePoucoUrgente`, `EstrategiaPrioridadeRotina`.
 
-**Justificativa:** Permite selecionar a lógica de prioridade em tempo de execução.
+**Justificativa:**  
+Permite selecionar a lógica de prioridade em tempo de execução.
 
 ---
 
 ### R1, R9: Orquestração do Sistema
 
-**Padrão Aplicado:** Facade
+**Padrão Aplicado:** Facade  
 
-**Aplicação:**
+**Aplicação:**  
 Fornece uma interface unificada para os subsistemas do sistema.
 
 **Estrutura:**
-- **`SistemaDiagnosticoFacade`:** Encapsula a complexidade dos múltiplos padrões aplicados.
+- **`SistemaDiagnosticoFacade`:** Encapsula a complexidade dos múltiplos padrões aplicados.  
 
 Expõe métodos como:
 - `registrarNovoExame()`
@@ -141,4 +145,6 @@ Expõe métodos como:
 - `imprimirLaudo()`
 - `notificarPaciente()`
 
-**Justificativa:** Simplifica a interação do cliente com o sistema, escondendo detalhes de implementação e integrando os diversos padrões utilizados.
+**Justificativa:**  
+Simplifica a interação do cliente com o sistema, escondendo detalhes de implementação e integrando os diversos padrões utilizados.
+
