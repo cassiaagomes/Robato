@@ -1,8 +1,9 @@
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\core\SequencialExameGenerator.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\Desconto.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\CalculoPreco.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\DescontoConvenio.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\DescontoDecorator.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\DescontoIdoso.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\DescontoOutubroRosa.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\desconto\PagamentoExames.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Medico.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Paciente.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\domain\Pagamento.java
@@ -16,15 +17,11 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\HemogramaAgrupado.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\HemogramaCompleto.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\LDL.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Potassio.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\RaioX.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\RessonanciaMagnetica.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Sodio.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Sorologia.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\TgoAst.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\TgpAlt.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\TipoExame.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Triglicerideos.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\exame\Ureia.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\facade\SistemaDiagnosticoFacade.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\infra\CsvLoader.java
@@ -37,7 +34,7 @@ C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\laudo\TextoFormato.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\AssuntoNotificacao.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\NotificadorEmail.java
-C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\NotificadorWhatsapp.java
+C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\NotificadorTelegram.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\notificacao\ObservadorNotificacao.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridade.java
 C:\Users\cassi\Downloads\robato-diagnosticos-thymeleaf\src\main\java\com\robato\diagnosticos\prioridade\EstrategiaPrioridadePoucoUrgente.java

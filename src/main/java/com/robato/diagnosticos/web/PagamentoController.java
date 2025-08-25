@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.robato.diagnosticos.desconto.CalculoPreco;
+import com.robato.diagnosticos.desconto.DescontoConvenio;
+import com.robato.diagnosticos.desconto.DescontoIdoso;
+import com.robato.diagnosticos.desconto.PagamentoExames;
 import com.robato.diagnosticos.domain.Paciente;
 import com.robato.diagnosticos.domain.Pagamento;
 import com.robato.diagnosticos.service.PacienteService;
@@ -30,17 +34,13 @@ public class PagamentoController {
     @GetMapping("/pagamentos")
     public String mostrarFormularioPagamento(Model model, HttpServletRequest request) {
         List<Paciente> pacientes = pacienteService.listarPacientes();
-
-        // Lista hardcoded (alternativa)
         List<String> tiposExame = Arrays.asList(
                 "Hemograma", "Hemograma Completo", "Glicemia", "Ureia",
                 "Creatinina", "TGO (AST)", "TGP (ALT)", "HDL", "LDL",
                 "Triglicerídeos", "Potássio", "Sorologia", "RaioX", "Ressonancia Magnetica");
-
         model.addAttribute("pacientes", pacientes);
         model.addAttribute("tiposExame", tiposExame);
         model.addAttribute("currentUri", request.getRequestURI());
-
         return "pagamento";
     }
 
@@ -50,6 +50,8 @@ public class PagamentoController {
             @RequestParam List<String> nomesExames,
             @RequestParam(required = false) Boolean comConvenio,
             @RequestParam(required = false) Boolean ehIdoso,
+            // Adicionando um possível desconto futuro
+            @RequestParam(required = false) Boolean outubroRosa,
             Model model, HttpServletRequest request) {
 
         Paciente paciente = pacienteService.buscarPorNome(pacienteNome);
@@ -57,24 +59,30 @@ public class PagamentoController {
             return "redirect:/pagamentos?error=Paciente não encontrado";
         }
 
-        // Calcular valor total com descontos
-        double valorTotal = pagamentoService.calcularValorTotal(nomesExames);
-        double valorOriginal = valorTotal;
+        double valorOriginal = pagamentoService.calcularValorTotal(nomesExames);
 
-        // Aplicar descontos
+        // --- LÓGICA DO DECORATOR ---
+        // 1. Começa com o objeto base (o preço original)
+        CalculoPreco calculo = new PagamentoExames(valorOriginal);
+
+        // 2. "Envelopa" o objeto com os decoradores necessários
         if (comConvenio != null && comConvenio) {
-            valorTotal *= 0.85; // 15% desconto
+            calculo = new DescontoConvenio(calculo);
         }
         if (ehIdoso != null && ehIdoso) {
-            valorTotal *= 0.92; // 8% desconto
+            calculo = new DescontoIdoso(calculo);
         }
+     
+        
+        
+        // 3. O valor final é o resultado da chamada no último "envelope"
+        double valorTotal = calculo.calcularPrecoFinal();
+        // --- FIM DA LÓGICA DO DECORATOR ---
 
         model.addAttribute("paciente", paciente);
         model.addAttribute("exames", nomesExames);
         model.addAttribute("valorOriginal", valorOriginal);
         model.addAttribute("valorTotal", valorTotal);
-        model.addAttribute("comConvenio", comConvenio != null ? comConvenio : false);
-        model.addAttribute("ehIdoso", ehIdoso != null ? ehIdoso : false);
         model.addAttribute("descontoAplicado", valorOriginal - valorTotal);
         model.addAttribute("currentUri", request.getRequestURI());
 
