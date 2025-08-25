@@ -187,6 +187,26 @@
                 </div>
             </div>
 
+            <div id="imagemContainer" class="card mb-4" style="display: none;">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Imagem do Exame</h5>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="imagemExame" class="form-label">Selecionar imagem do exame:</label>
+                            <input type="file" id="imagemExame" class="form-control" name="imagemExame"
+                                accept="image/*,.pdf,.dicom" />
+                            <div class="form-text">Formatos aceitos: JPG, PNG, PDF, DICOM</div>
+                        </div>
+                        <div class="col-md-12">
+                            <div id="previewContainer" style="display: none;">
+                                <h6>Pré-visualização:</h6>
+                                <img id="previewImage" class="img-thumbnail" style="max-height: 200px;" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="mt-4 text-end">
                 <p th:if="${erro}" th:text="${erro}" class="text-danger text-start"></p>
                 <button type="submit" class="btn btn-primary btn-lg px-5">Gerar Laudo</button>
@@ -200,13 +220,20 @@
             var tipoExame = document.getElementById('tipoExame').value;
             var subExamesDiv = document.getElementById('subExamesContainer');
             var contextoDiv = document.getElementById('contextoContainer');
+            var imagemDiv = document.getElementById('imagemContainer');
 
             if (tipoExame === 'HEMOGRAMA_AGRUPADO') {
-                subExamesDiv.style.display = 'block'; // Mostra checkboxes
-                contextoDiv.style.display = 'none';  // Esconde campos de contexto
+                subExamesDiv.style.display = 'block';
+                contextoDiv.style.display = 'none';
+                imagemDiv.style.display = 'none';
+            } else if (tipoExame === 'RAIO_X' || tipoExame === 'RESSONANCIA') {
+                subExamesDiv.style.display = 'none';
+                contextoDiv.style.display = 'block';
+                imagemDiv.style.display = 'block';
             } else {
-                subExamesDiv.style.display = 'none';   // Esconde checkboxes
-                contextoDiv.style.display = 'block'; // Mostra campos de contexto
+                subExamesDiv.style.display = 'none';
+                contextoDiv.style.display = 'block';
+                imagemDiv.style.display = 'none';
             }
         }
 
@@ -270,6 +297,24 @@
             if (pacienteId && pacienteNome) {
                 // Simular change event para preencher dados visuais
                 document.getElementById('pacienteId').dispatchEvent(new Event('change'));
+            }
+        });
+
+        // Preview da imagem selecionada
+        document.getElementById('imagemExame').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            const previewContainer = document.getElementById('previewContainer');
+            const previewImage = document.getElementById('previewImage');
+
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
             }
         });
     </script>
