@@ -13,10 +13,6 @@ import org.springframework.stereotype.Service;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import com.robato.diagnosticos.core.SequencialExameGenerator;
-import com.robato.diagnosticos.desconto.Desconto;
-import com.robato.diagnosticos.desconto.DescontoConvenio;
-import com.robato.diagnosticos.desconto.DescontoIdoso;
-import com.robato.diagnosticos.desconto.DescontoOutubroRosa;
 import com.robato.diagnosticos.domain.Medico;
 import com.robato.diagnosticos.domain.Paciente;
 import com.robato.diagnosticos.exame.ExameComponent;
@@ -33,7 +29,7 @@ import com.robato.diagnosticos.laudo.PdfFormato;
 import com.robato.diagnosticos.laudo.TextoFormato;
 import com.robato.diagnosticos.notificacao.AssuntoNotificacao;
 import com.robato.diagnosticos.notificacao.NotificadorEmail;
-import com.robato.diagnosticos.notificacao.NotificadorWhatsapp;
+import com.robato.diagnosticos.notificacao.NotificadorTelegram;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridade;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeRotina;
 import com.robato.diagnosticos.prioridade.EstrategiaPrioridadeUrgente;
@@ -60,12 +56,13 @@ public class SistemaDiagnosticoFacade {
     private final CsvLoader csv;
 
     public SistemaDiagnosticoFacade(SequencialExameGenerator sequencial, CsvLoader csv,
-            PacienteService pacienteService) {
+            PacienteService pacienteService, NotificadorEmail notificadorEmail,
+            NotificadorTelegram notificadorTelegram) {
         this.sequencial = sequencial;
         this.csv = csv;
         this.pacienteService = pacienteService;
-        assunto.adicionar(new NotificadorEmail());
-        assunto.adicionar(new NotificadorWhatsapp());
+        assunto.adicionar(notificadorEmail);
+        assunto.adicionar(notificadorTelegram);
     }
 
     public void validarExame(ExameComponent exame, ValidacaoContexto contexto) {
@@ -108,6 +105,7 @@ public class SistemaDiagnosticoFacade {
                         ExameComponent subExame = ExameFactory.criar(tipoSubExame);
                         exameComposto.adicionar(subExame);
                     } catch (IllegalArgumentException e) {
+                        // Ignora sub-exames inválidos
                     }
                 }
             }
@@ -124,6 +122,7 @@ public class SistemaDiagnosticoFacade {
         List<String> subExamesSelecionados = req.getSubExamesSelecionados();
         List<ResultadoExameItem> resultadosFiltrados = new ArrayList<>();
 
+        // --- LINHA CORRIGIDA AQUI ---
         if (subExamesSelecionados != null && !subExamesSelecionados.isEmpty() && todosOsResultados != null) {
             resultadosFiltrados = todosOsResultados.stream()
                     .filter(resultado -> subExamesSelecionados.contains(resultado.getNomeExame()))
@@ -141,7 +140,6 @@ public class SistemaDiagnosticoFacade {
                 .data(LocalDate.now())
                 .build();
 
-        // DEPOIS adicionar a imagem se existir
         if (ctx.getImagemBase64() != null) {
             laudo.setImagemBase64(ctx.getImagemBase64());
         }
@@ -181,10 +179,8 @@ public class SistemaDiagnosticoFacade {
         if (email != null && !email.isEmpty()) {
             assunto.notificarTodos(mensagem, email);
         }
-
-        if (telefone != null && !telefone.isEmpty()) {
-            assunto.notificarTodos(mensagem, telefone);
-        }
+        
+        assunto.notificarTodos(mensagem, telefone);
     }
 
     public String formatarLaudo(LaudoCompleto laudoCompleto, String formato) {
@@ -217,34 +213,13 @@ public class SistemaDiagnosticoFacade {
                     TipoExame.valueOf(nomeExame.toUpperCase());
                     resultados.add(new ResultadoExameItem(nomeExame, nextLine[1], nextLine[2], nextLine[3], ""));
                 } catch (IllegalArgumentException e) {
+                    // Ignora linhas com exames desconhecidos
                 }
             }
         }
         return resultados;
     }
-
-    public void notificarPaciente(String mensagem, String destino) {
-        assunto.notificarTodos(mensagem, destino);
-    }
-
-    public double aplicarDescontos(double precoBase, List<Desconto> descontos) {
-        double valor = precoBase;
-        for (Desconto d : descontos)
-            valor = d.aplicar(valor);
-        return valor;
-    }
-
-    public List<Desconto> construirDescontos(boolean convenio, boolean idoso, boolean outubroRosa) {
-        List<Desconto> ds = new ArrayList<>();
-        if (convenio)
-            ds.add(new DescontoConvenio(0.15));
-        if (idoso)
-            ds.add(new DescontoIdoso());
-        if (outubroRosa)
-            ds.add(new DescontoOutubroRosa());
-        return ds;
-    }
-
+    
     public void configurarFilaUrgente() {
         fila.setEstrategia(new EstrategiaPrioridadeUrgente());
     }
@@ -275,34 +250,5 @@ public class SistemaDiagnosticoFacade {
 
     public Map<String, Medico> listarMedicos() {
         return csv.listarMedicos();
-    }
-
-    public void adicionarPaciente(Paciente novoPaciente) {
-        listarPacientes().put(novoPaciente.getNome(), novoPaciente);
-    }
-
-    public double calcularCustoTotal(List<TipoExame> tiposExames, boolean comConvenio, boolean ehIdoso) {
-        double total = 0.0;
-        for (TipoExame tipo : tiposExames) {
-            total += 100.0;
-        }
-
-        if (comConvenio) {
-            total *= 0.85;
-        }
-        if (ehIdoso) {
-            total *= 0.9;
-        }
-
-        return total;
-    }
-
-    public void registrarPagamento(String pacienteNome, double valorPago) {
-        System.out.println("======================================");
-        System.out.println("COMPROVANTE DE PAGAMENTO");
-        System.out.println("Paciente: " + pacienteNome);
-        System.out.printf("Valor Pago: R$ %.2f\n", valorPago);
-        System.out.println("Data: " + java.time.LocalDate.now());
-        System.out.println("======================================");
     }
 }

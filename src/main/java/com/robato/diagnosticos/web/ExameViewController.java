@@ -21,7 +21,7 @@ import com.robato.diagnosticos.exame.TipoExame;
 import com.robato.diagnosticos.facade.SistemaDiagnosticoFacade;
 import com.robato.diagnosticos.laudo.LaudoCompleto;
 import com.robato.diagnosticos.notificacao.NotificadorEmail;
-import com.robato.diagnosticos.notificacao.NotificadorWhatsapp;
+import com.robato.diagnosticos.notificacao.NotificadorTelegram;
 import com.robato.diagnosticos.service.PacienteService;
 import com.robato.diagnosticos.web.dto.LaudoRequest;
 import com.robato.diagnosticos.web.dto.ResultadoExameItem;
@@ -36,14 +36,14 @@ public class ExameViewController {
     private final SistemaDiagnosticoFacade facade;
     private final PacienteService pacienteService;
     private final NotificadorEmail notificadorEmail;
-    private final NotificadorWhatsapp notificadorWhatsapp;
+    private final NotificadorTelegram notificadorTelegram;
 
     public ExameViewController(SistemaDiagnosticoFacade facade, PacienteService pacienteService,
-            NotificadorEmail notificadorEmail, NotificadorWhatsapp notificadorWhatsapp) {
+            NotificadorEmail notificadorEmail, NotificadorTelegram notificadorTelegram) {
         this.facade = facade;
         this.pacienteService = pacienteService;
         this.notificadorEmail = notificadorEmail;
-        this.notificadorWhatsapp = notificadorWhatsapp;
+        this.notificadorTelegram = notificadorTelegram;
     }
 
     @GetMapping({ "/", "/dashboard" })
@@ -223,7 +223,7 @@ public class ExameViewController {
 
             notificadorEmail.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
                     req.getEmailPaciente());
-            notificadorWhatsapp.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
+            notificadorTelegram.atualizar("Seu exame está pronto! Acesse o sistema para visualizar.",
                     req.getTelefonePaciente());
 
             return "laudo";

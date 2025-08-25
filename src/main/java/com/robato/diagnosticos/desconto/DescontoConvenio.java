@@ -1,13 +1,20 @@
 package com.robato.diagnosticos.desconto;
 
-public class DescontoConvenio implements Desconto {
-    private final double p;
+/**
+ * Decorator Concreto que adiciona a responsabilidade de aplicar o desconto de convênio.
+ */
+public class DescontoConvenio extends DescontoDecorator {
+    
+    private final double percentualDesconto = 0.15; // 15%
 
-    public DescontoConvenio(double p) {
-        this.p = p;
+    public DescontoConvenio(CalculoPreco calculoPreco) {
+        super(calculoPreco);
     }
 
-    public double aplicar(double v) {
-        return v * (1 - p);
+    @Override
+    public double calcularPrecoFinal() {
+    
+        double precoCalculado = super.calcularPrecoFinal(); 
+        return precoCalculado * (1 - percentualDesconto);
     }
 }
