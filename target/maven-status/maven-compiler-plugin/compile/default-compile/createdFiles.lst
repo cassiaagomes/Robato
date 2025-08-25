@@ -6,7 +6,6 @@ com\robato\diagnosticos\web\FilaController.class
 com\robato\diagnosticos\prioridade\FilaDePrioridade$Item.class
 com\robato\diagnosticos\web\dto\LaudoRequest.class
 com\robato\diagnosticos\exame\TipoExame.class
-com\robato\diagnosticos\exame\Sodio.class
 com\robato\diagnosticos\exame\TgpAlt.class
 com\robato\diagnosticos\notificacao\NotificadorEmail.class
 com\robato\diagnosticos\service\FilaService.class
@@ -16,7 +15,6 @@ com\robato\diagnosticos\desconto\DescontoIdoso.class
 com\robato\diagnosticos\domain\Medico.class
 com\robato\diagnosticos\validacao\ValidadorRaioX.class
 com\robato\diagnosticos\exame\Creatinina.class
-com\robato\diagnosticos\exame\Triglicerideos.class
 com\robato\diagnosticos\domain\Pagamento.class
 com\robato\diagnosticos\exame\HemogramaCompleto.class
 com\robato\diagnosticos\web\PacienteViewController.class
@@ -37,9 +35,7 @@ com\robato\diagnosticos\web\NotificacaoSimulacaoController.class
 com\robato\diagnosticos\validacao\ValidadorRessonancia.class
 com\robato\diagnosticos\web\dto\ValidacaoContexto.class
 com\robato\diagnosticos\web\dto\ResultadoExameItem.class
-com\robato\diagnosticos\exame\Sorologia.class
 com\robato\diagnosticos\validacao\ValidadorImplantesMetalicos.class
-com\robato\diagnosticos\exame\Potassio.class
 com\robato\diagnosticos\prioridade\EstrategiaPrioridadeRotina.class
 com\robato\diagnosticos\web\ExameViewController.class
 com\robato\diagnosticos\web\PagamentoController.class
