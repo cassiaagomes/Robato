@@ -16,6 +16,7 @@ import com.robato.diagnosticos.domain.factory.ExameFactory;
 import com.robato.diagnosticos.domain.model.Paciente;
 import com.robato.diagnosticos.domain.repository.PacienteRepository;
 import com.robato.diagnosticos.infrastructure.file.CsvImporter;
+import com.robato.diagnosticos.web.dto.PedidoFilaRequest;
 
 @Controller
 @RequestMapping("/pacientes")
@@ -32,7 +33,13 @@ public class PacienteController {
     @GetMapping
     public String listarPacientes(Model model) {
         model.addAttribute("pacientes", pacienteRepository.listarTodos());
-        model.addAttribute("tipos", ExameFactory.listarTipos()); 
+        model.addAttribute("tipos", ExameFactory.listarTipos());
+        
+        
+        if (!model.containsAttribute("pedidoFilaRequest")) {
+            model.addAttribute("pedidoFilaRequest", new PedidoFilaRequest());
+        }
+        
         return "pacientes";
     }
 

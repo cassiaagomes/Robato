@@ -3,8 +3,11 @@ package com.robato.diagnosticos.domain.service;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.robato.diagnosticos.domain.composite.ItemExame;
 
+@Component
 public class FilaDePrioridadeExames {
 
     public enum Prioridade {
